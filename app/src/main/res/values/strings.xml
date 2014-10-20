@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Quizzter</string>
+    <string name="action_settings">Opciones</string>
+    <string name="title_activity_profile">Profile</string>
+    <string name="jugar">Play</string>
+    <string name="clasificacion">Ranking</string>
+    <string name="opciones">Settings</string>
+    <string name="salir">Quit</string>
+    <string name="signtwitter">Sign in with twitter</string>
+    <string name="logouttwitter">Log out</string>
+
+    <style name="ButtonText">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_margin">3dp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:shadowColor">#000000</item>
+        <item name="android:shadowDx">1</item>
+        <item name="android:shadowDy">1</item>
+        <item name="android:shadowRadius">2</item>
+    </style>
+
+    <style name="DefaultButtonText">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">#979797</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_margin">3dp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:shadowColor">#f9f9f9</item>
+        <item name="android:shadowDx">1</item>
+        <item name="android:shadowDy">1</item>
+        <item name="android:shadowRadius">1</item>
+    </style>
+
+    <string name="title_activity_game">Game</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="ranking">Ranking</string>
+    <string name="score">Score</string>
+    <string name="thistweet">This tweet ...</string>
+    <string name="writen">has been writen by:</string>
+
+</resources>

@@ -1,0 +1,41 @@
+<RelativeLayout
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/imageView"
+        android:src="@drawable/background"
+        android:scaleType="centerCrop" />
+
+    <util.CircularImageView
+        app:border="true"
+        app:border_color="@color/text"
+        app:border_width="2dp"
+        app:shadow="true"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:id="@+id/iv_photoUser"
+        android:src="@drawable/logo"
+        android:scaleType="centerCrop"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingRight="10dp"
+        android:paddingLeft="30dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/layers_twitter_button_bg"
+        android:text="@string/signtwitter"
+        style="@style/ButtonText"
+        android:layout_alignParentBottom="true" />
+
+</RelativeLayout>

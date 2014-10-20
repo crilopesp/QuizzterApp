@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="jugar">Empezar</string>
+    <string name="clasificacion">Clasificación</string>
+    <string name="opciones">Opciones</string>
+    <string name="salir">Salir</string>
+    <string name="signtwitter">Entrar con twitter</string>
+    <string name="logouttwitter">Cerrar sesión</string>
+    <string name="ranking">Posición</string>
+    <string name="score">Puntuación</string>
+    <string name="thistweet">Este tweet ...</string>
+    <string name="writen">ha sido escrito por:</string>
+</resources>
