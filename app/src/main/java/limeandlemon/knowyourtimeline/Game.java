@@ -11,6 +11,7 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
@@ -29,6 +30,7 @@ import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -60,7 +62,7 @@ public class Game extends Activity {
     User respuesta;
     SQLiteDatabase db;
     ArrayList<User> respuestas;
-    int aciertos, fallos;
+    double aciertos, fallos;
     TextView txtPregunta;
     Twitter twitter;
     ProgressBar pDialog;
@@ -77,6 +79,10 @@ public class Game extends Activity {
             Preferencias.setFirstHome(this, 0);
         }
 
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
         friends = new ArrayList<Long>();
         respuestas = new ArrayList<User>();
         pDialog = (ProgressBar) findViewById(R.id.progressBar);
@@ -148,9 +154,11 @@ public class Game extends Activity {
 
     private void cambiarPuntuacion() {
         TextView puntuacion = (TextView) findViewById(R.id.txtScore);
-        if(fallos==0)  puntuacion.setText((aciertos/2)*100+"");
-        else if(aciertos==0) puntuacion.setText(0+"");
-        else puntuacion.setText((aciertos/fallos)*100+"");
+
+        double porcentaje = (aciertos/(aciertos+fallos))*100;
+        DecimalFormat df = new DecimalFormat("#.00");
+        String punt = df.format(porcentaje);
+        puntuacion.setText(punt+"%");
     }
 
     private void mostrarOtraPregunta() throws TwitterException {
@@ -158,9 +166,9 @@ public class Game extends Activity {
         respuestas.clear();
         layoutRespuestas.removeAllViews();
         txtPregunta.setText(seleccionarPregunta());
-        Log.e("mostrar otra pregunta antes de cambiar",respuestas.toString());
+        Log.e("mostrar otra pregunta antes de cambiar", respuestas.toString());
         seleccionarRespuestaAzar();
-        Log.e("mostrar otra pregunta despues de cambiar",respuestas.toString());
+        Log.e("mostrar otra pregunta despues de cambiar", respuestas.toString());
     }
     private void seleccionarRespuestaAzar() throws TwitterException {
         Random randomizer = new Random();
@@ -320,10 +328,10 @@ public class Game extends Activity {
         v.setImageResource(R.drawable.divisor);
         layoutRespuestas.addView(v);
     }
-    public void updateAciertos(int aciertos) {
+    public void updateAciertos(double aciertos) {
         db.execSQL("UPDATE Puntuacion SET Aciertos="+aciertos+";");
     }
-    public void updateFallos(int fallos) {
+    public void updateFallos(double fallos) {
         db.execSQL("UPDATE Puntuacion SET Fallos="+fallos+";");
     }
     public void getAciertosFallos() {
