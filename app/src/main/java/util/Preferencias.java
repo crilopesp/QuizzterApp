@@ -18,6 +18,7 @@ public class Preferencias {
     static final String PREF_KEY_TWITTER_BANNER = "user_profile_banner";
     static final String PREF_KEY_TWITTER_URLBANNER = "user_profile_banner_url";
     static final String PREF_KEY_TWITTER_COLOR = "user_profile_color";
+    private static final String APP_FIRST_HOME = "FIRST_HOME";
 
     //OAUTHTOKEN
     public static void setOauthToken(Context context, String token)
@@ -165,6 +166,24 @@ public class Preferencias {
     public static int getProfileColor(Context context) {
         try {
             return context.getSharedPreferences(USER_FILE, Activity.MODE_PRIVATE).getInt(PREF_KEY_TWITTER_COLOR, -1);
+        } catch (Exception e) {
+            Log.d(Preferencias.class.getSimpleName(), "Exception", e);
+        }
+        return -1;
+    }
+    public static void setFirstHome(Context context, int id) {
+        try {
+            SharedPreferences.Editor editor = context.getSharedPreferences(APP_FILE, Activity.MODE_PRIVATE).edit();
+            editor.putInt(APP_FIRST_HOME, id);
+            editor.commit();
+        } catch (Exception e) {
+            Log.d(Preferencias.class.getSimpleName(), "Exception", e);
+        }
+    }
+
+    public static int getFirstHome(Context context) {
+        try {
+            return context.getSharedPreferences(APP_FILE, Activity.MODE_PRIVATE).getInt(APP_FIRST_HOME, 1);
         } catch (Exception e) {
             Log.d(Preferencias.class.getSimpleName(), "Exception", e);
         }

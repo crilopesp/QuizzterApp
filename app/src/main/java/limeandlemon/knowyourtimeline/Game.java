@@ -70,6 +70,13 @@ public class Game extends Activity {
         setContentView(R.layout.activity_game);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         db = new InternalDBHandler(this).getWritableDatabase();
+
+        if (Preferencias.getFirstHome(this) == 1) {
+            String sql = "INSERT OR IGNORE INTO \"main\".\"Puntuacion\" (\"Aciertos\",\"Fallos\") VALUES (0,0);";
+            db.execSQL(sql);
+            Preferencias.setFirstHome(this, 0);
+        }
+
         friends = new ArrayList<Long>();
         respuestas = new ArrayList<User>();
         pDialog = (ProgressBar) findViewById(R.id.progressBar);
@@ -95,6 +102,8 @@ public class Game extends Activity {
         respuestas.add(respuesta);
         return statuses.get(num).getText();
     }
+
+
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private void mostrarRespuestas() {
         Collections.shuffle(respuestas);
@@ -112,7 +121,7 @@ public class Game extends Activity {
                     if(((Button)view).getText().toString().equals(respuesta.getName())){
 
                         updateAciertos(aciertos+1);
-                        getAciertosFallos();
+                        aciertos = aciertos+1;
                         cambiarPuntuacion();
                         try {
                             mostrarOtraPregunta();
@@ -122,7 +131,7 @@ public class Game extends Activity {
                         }
                     }else {
                         updateFallos(fallos+1);
-                        getAciertosFallos();
+                        fallos = fallos+1;
                         cambiarPuntuacion();
                         try {
                             mostrarOtraPregunta();
@@ -140,7 +149,7 @@ public class Game extends Activity {
     private void cambiarPuntuacion() {
         TextView puntuacion = (TextView) findViewById(R.id.txtScore);
         if(fallos==0)  puntuacion.setText((aciertos/2)*100+"");
-        if(aciertos==0) puntuacion.setText(0+"");
+        else if(aciertos==0) puntuacion.setText(0+"");
         else puntuacion.setText((aciertos/fallos)*100+"");
     }
 
@@ -149,15 +158,19 @@ public class Game extends Activity {
         respuestas.clear();
         layoutRespuestas.removeAllViews();
         txtPregunta.setText(seleccionarPregunta());
+        Log.e("mostrar otra pregunta antes de cambiar",respuestas.toString());
         seleccionarRespuestaAzar();
+        Log.e("mostrar otra pregunta despues de cambiar",respuestas.toString());
     }
     private void seleccionarRespuestaAzar() throws TwitterException {
         Random randomizer = new Random();
-        for(int i = 0;i<3;i++) {
+        int i = 1;
+        while(i<4) {
             int num = randomizer.nextInt(friends.size());
             User user = twitter.showUser(friends.get(num));
             if(!respuestas.contains(user)){
                 respuestas.add(user);
+                i++;
             }
         }
         mostrarRespuestas();

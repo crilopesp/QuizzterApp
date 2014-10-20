@@ -185,6 +185,8 @@ public class Main extends Activity {
                         descargarFotos();
                         Intent intent = new Intent(getApplicationContext(),Profile.class);
                         startActivity(intent);
+
+                        this.finish();
                     }
                 } catch (Exception ex) {
                     // Check log for login errors
