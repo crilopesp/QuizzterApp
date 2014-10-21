@@ -2,18 +2,19 @@ package limeandlemon.knowyourtimeline;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Base64;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,22 +26,19 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import org.w3c.dom.Text;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
 import twitter4j.IDs;
 import twitter4j.Paging;
-import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
@@ -49,21 +47,26 @@ import twitter4j.auth.AccessToken;
 import twitter4j.conf.ConfigurationBuilder;
 import util.InternalDBHandler;
 import util.Preferencias;
+import util.TextViewEx;
 
 
 public class Game extends Activity {
 
     static String TWITTER_CONSUMER_KEY = "o4YaT3H0SgmjQFSkGJy1A";
     static String TWITTER_CONSUMER_SECRET = "uxCIVsaPSsvckIBpSfZCLYGli0jHus4xMkE5sgk";
-    FrameLayout pregunta;
+    RelativeLayout pregunta;
     LinearLayout layoutRespuestas;
     List<twitter4j.Status> statuses;
     List<Long> friends;
     User respuesta;
     SQLiteDatabase db;
+    int preguntaLength;
     ArrayList<User> respuestas;
-    double aciertos, fallos;
-    TextView txtPregunta;
+    int aciertos, fallos;
+    ScrollView scroll;
+    TextViewEx txtPregunta;
+    Typeface tf;
+    Animation left_to_right_animation, right_to_left_animation, scale;
     Twitter twitter;
     ProgressBar pDialog;
     @Override
@@ -72,7 +75,16 @@ public class Game extends Activity {
         setContentView(R.layout.activity_game);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         db = new InternalDBHandler(this).getWritableDatabase();
+        scroll = (ScrollView) findViewById(R.id.scrollView);
 
+        scroll.setBackgroundColor(getResources().getColor(R.color.text));
+        left_to_right_animation = AnimationUtils.loadAnimation(this, R.anim.left_to_right);
+        right_to_left_animation = AnimationUtils.loadAnimation(this, R.anim.right_to_left);
+        scale = AnimationUtils.loadAnimation(this, R.anim.scale);
+
+
+        String fontPath = "fonts/Cicle Semi.ttf";
+        tf = Typeface.createFromAsset(getAssets(), fontPath);
         if (Preferencias.getFirstHome(this) == 1) {
             String sql = "INSERT OR IGNORE INTO \"main\".\"Puntuacion\" (\"Aciertos\",\"Fallos\") VALUES (0,0);";
             db.execSQL(sql);
@@ -86,89 +98,189 @@ public class Game extends Activity {
         friends = new ArrayList<Long>();
         respuestas = new ArrayList<User>();
         pDialog = (ProgressBar) findViewById(R.id.progressBar);
-        pregunta = (FrameLayout) findViewById(R.id.frameLayoutPregunta);
+        pregunta = (RelativeLayout) findViewById(R.id.relativePregunta);
         layoutRespuestas = (LinearLayout) findViewById(R.id.linearRespuestas);
         final ImageView imgperfil = (ImageView) findViewById(R.id.iv_photoUser);
-        txtPregunta = (TextView) findViewById(R.id.txtPregunta);
+        txtPregunta = (TextViewEx) findViewById(R.id.txtPregunta);
+        txtPregunta.setTypeface(tf);
         imgperfil.setImageBitmap(decodeBase64(Preferencias.getPhoto(this)));
-        FrameLayout frame1 = (FrameLayout) findViewById(R.id.frameLayout);
+        RelativeLayout frame1 = (RelativeLayout) findViewById(R.id.frameLayout);
         FrameLayout frame2 = (FrameLayout) findViewById(R.id.frameLayout2);
         moveViewDown(frame1);
         moveViewDownSlow(frame2);
         moveViewDownSlow(imgperfil);
         getAciertosFallos();
+        cambiarPuntuacion();
         pregunta.setVisibility(View.GONE);
         new getTimeLine().execute();
     }
 
     private String seleccionarPregunta() {
-        Random randomizer = new Random();
-        int num = randomizer.nextInt(statuses.size());
-        respuesta = statuses.get(num).getUser();
-        respuestas.add(respuesta);
-        return statuses.get(num).getText();
+        Log.e("respuestas", statuses.isEmpty() + "");
+        while (!statuses.isEmpty()) {
+            Random randomizer = new Random();
+            int num = randomizer.nextInt(statuses.size());
+            respuesta = statuses.get(num).getUser();
+            Log.e("id", statuses.get(num).getId() + "");
+            Log.e("id", comprobarRespondido(statuses.get(num).getId()) + "");
+            if (comprobarRespondido(statuses.get(num).getId())) statuses.remove(num);
+            else {
+                respuestas.add(respuesta);
+                registrarPregunta(statuses.get(num).getId());
+                preguntaLength = statuses.get(num).getText().length();
+                Log.e("length", preguntaLength + " " + statuses.get(num).getText());
+                return statuses.get(num).getText();
+            }
+        }
+        return "Ya no quedan más tweets...";
+    }
+
+    private void registrarPregunta(long id) {
+        String sql = "INSERT OR IGNORE INTO \"main\".\"Preguntas\" (\"id\") VALUES (" + id + ");";
+        db.execSQL(sql);
+    }
+
+    private boolean comprobarRespondido(long id) {
+        String sql = "SELECT id FROM Preguntas where id=" + id + ";";
+        Cursor cursor = db.rawQuery(sql, null);
+        if (cursor.getCount() == 1) {
+            cursor.close();
+
+            return true;
+        }
+        cursor.close();
+
+        return false;
     }
 
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private void mostrarRespuestas() {
         Collections.shuffle(respuestas);
+
         for(int i = 0;i < respuestas.size();i++){
         final Button resp = new Button(this);
         resp.setText(respuestas.get(i).getName());
         resp.setLayoutParams(new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT));
-        resp.setTextSize(24);
+            resp.setTypeface(tf);
+            resp.setTextSize(20);
             resp.setBackground(getResources().getDrawable(R.drawable.selector_button));
             resp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if(((Button)view).getText().toString().equals(respuesta.getName())){
-
                         updateAciertos(aciertos+1);
                         aciertos = aciertos+1;
                         cambiarPuntuacion();
-                        try {
-                            mostrarOtraPregunta();
+                        pregunta.startAnimation(right_to_left_animation);
 
-                        } catch (TwitterException e) {
-                            e.printStackTrace();
-                        }
+                        right_to_left_animation.setAnimationListener(new Animation.AnimationListener() {
+
+                            @Override
+                            public void onAnimationStart(Animation animation) {
+                                // TODO Auto-generated method stub
+                                scroll.setBackgroundColor(getResources().getColor(R.color.acierto));
+                            }
+
+                            @Override
+                            public void onAnimationRepeat(Animation animation) {
+                                // TODO Auto-generated method stub
+
+                            }
+
+                            @Override
+                            public void onAnimationEnd(Animation animation) {
+                                try {
+
+                                    moveViewDown(pregunta);
+                                    scroll.setBackgroundColor(getResources().getColor(R.color.text));
+                                    mostrarOtraPregunta();
+
+                                } catch (TwitterException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+
+
                     }else {
                         updateFallos(fallos+1);
                         fallos = fallos+1;
                         cambiarPuntuacion();
-                        try {
-                            mostrarOtraPregunta();
-                        } catch (TwitterException e) {
-                            e.printStackTrace();
-                        }
+                        pregunta.startAnimation(left_to_right_animation);
+
+                        left_to_right_animation.setAnimationListener(new Animation.AnimationListener() {
+
+                            @Override
+                            public void onAnimationStart(Animation animation) {
+                                // TODO Auto-generated method stub
+
+                                scroll.setBackgroundColor(getResources().getColor(R.color.fallo));
+                            }
+
+                            @Override
+                            public void onAnimationRepeat(Animation animation) {
+                                // TODO Auto-generated method stub
+
+                            }
+
+                            @Override
+                            public void onAnimationEnd(Animation animation) {
+                                try {
+
+                                    scroll.setBackgroundColor(getResources().getColor(R.color.text));
+                                    moveViewDown(pregunta);
+                                    mostrarOtraPregunta();
+
+                                } catch (TwitterException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
                     }
                 }
             });
         layoutRespuestas.addView(resp);
-            addDividier();
+            if (i != 3)
+                addDividier();
         }
     }
 
     private void cambiarPuntuacion() {
         TextView puntuacion = (TextView) findViewById(R.id.txtScore);
+        TextView txtaciertos = (TextView) findViewById(R.id.txtAciertos);
+        TextView txtfallos = (TextView) findViewById(R.id.txtFallos);
 
-        double porcentaje = (aciertos/(aciertos+fallos))*100;
-        DecimalFormat df = new DecimalFormat("#.00");
-        String punt = df.format(porcentaje);
-        puntuacion.setText(punt+"%");
+        txtaciertos.setText(aciertos + "");
+        txtfallos.setText(fallos + "");
+        if (aciertos == 0 && fallos == 0)
+            puntuacion.setText(0 + "%");
+        else {
+            double porcentaje = (aciertos / (aciertos + fallos)) * 100;
+
+            DecimalFormat df = new DecimalFormat("#.00");
+            String punt = df.format(porcentaje);
+            puntuacion.setText(punt + "%");
+        }
+
+        puntuacion.startAnimation(scale);
     }
 
     private void mostrarOtraPregunta() throws TwitterException {
 
         respuestas.clear();
         layoutRespuestas.removeAllViews();
-        txtPregunta.setText(seleccionarPregunta());
-        Log.e("mostrar otra pregunta antes de cambiar", respuestas.toString());
+
+        txtPregunta.setText(seleccionarPregunta(), true);
+        if (preguntaLength < 40) txtPregunta.setTextSize(TypedValue.COMPLEX_UNIT_SP, 35);
+        else if (preguntaLength < 80) txtPregunta.setTextSize(TypedValue.COMPLEX_UNIT_SP, 32);
+        else if (preguntaLength > 80 && preguntaLength < 120)
+            txtPregunta.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
+        else txtPregunta.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
+        Log.e("tamaño", txtPregunta.getTextSize() + "");
         seleccionarRespuestaAzar();
-        Log.e("mostrar otra pregunta despues de cambiar", respuestas.toString());
     }
     private void seleccionarRespuestaAzar() throws TwitterException {
         Random randomizer = new Random();
@@ -236,7 +348,12 @@ public class Game extends Activity {
         protected void onPostExecute(String file_url) {
             super.onPostExecute("");
             pDialog.setVisibility(View.GONE);
-            txtPregunta.setText(seleccionarPregunta());
+            txtPregunta.setText(seleccionarPregunta(), true);
+            if (preguntaLength < 40) txtPregunta.setTextSize(TypedValue.COMPLEX_UNIT_SP, 35);
+            else if (preguntaLength < 80) txtPregunta.setTextSize(TypedValue.COMPLEX_UNIT_SP, 32);
+            else if (preguntaLength > 80 && preguntaLength < 120)
+                txtPregunta.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
+            else txtPregunta.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
             new getFriendList().execute();
         }
         /**

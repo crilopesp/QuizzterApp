@@ -10,4 +10,6 @@
     <string name="score">Puntuación</string>
     <string name="thistweet">Este tweet ...</string>
     <string name="writen">ha sido escrito por:</string>
+    <string name="aciertos">Hits</string>
+    <string name="fallos">Fails</string>
 </resources>

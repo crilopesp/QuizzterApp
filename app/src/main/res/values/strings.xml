@@ -45,5 +45,7 @@
     <string name="score">Score</string>
     <string name="thistweet">This tweet ...</string>
     <string name="writen">has been writen by:</string>
+    <string name="aciertos">Hits</string>
+    <string name="fallos">Fails</string>
 
 </resources>

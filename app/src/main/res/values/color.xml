@@ -41,6 +41,7 @@
     <color name="text_shadow">#000000</color>
     <color name="button_background_enabled_start_maps">#ffeda71a</color>
     <color name="button_background_enabled_end_maps">#e4d88919</color>
+    <color name="ligh_blue">#ffccfff5</color>
     <color name="button_background_pressed_start_red_maps">#ffdc2324</color>
     <color name="button_background_pressed_end_red_maps">#ff9d1b1b</color>
     <color name="button_background_enabled_start_maps_valenbisi">#ff5f41ed</color>
@@ -67,4 +68,8 @@
     <color name="second_grey">#ff999999</color>
     <color name="card_white">#ffffffff</color>
     <color name="card_shadow">#8c666666</color>
+
+    <color name="acierto">#8c73b558</color>
+
+    <color name="fallo">#e1ff6161</color>
 </resources>

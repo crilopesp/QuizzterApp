@@ -15,7 +15,8 @@ public class InternalDBHandler extends SQLiteOpenHelper {
         //	Create	here	the	DB	by	code
         Log.e("bd", "Creamos la base de datos");
         db.execSQL("CREATE  TABLE main.Puntuacion (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, Aciertos INTEGER NOT NULL , Fallos INTEGER NOT NULL );");
-        }
+        db.execSQL("CREATE  TABLE main.Preguntas (id LONG PRIMARY KEY NOT NULL);");
+    }
 
     @Override
     public void onUpgrade(

@@ -1,18 +1,29 @@
 package limeandlemon.knowyourtimeline;
+
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.os.StrictMode;
+import android.util.Base64;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.Typeface;
-import android.os.Bundle;
-import android.app.Activity;
-import android.os.StrictMode;
-import android.util.Base64;
-import android.view.Menu;
 
 import twitter4j.Paging;
 import twitter4j.Twitter;
@@ -25,30 +36,12 @@ import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
 import util.Preferencias;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
-import android.content.pm.ActivityInfo;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.text.Html;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
-
 public class Main extends Activity {
     // Constants
     /**
      * Register your here app https://dev.twitter.com/apps/new and get your
      * consumer key and secret
-     * */
+     */
     static String TWITTER_CONSUMER_KEY = "o4YaT3H0SgmjQFSkGJy1A";
     static String TWITTER_CONSUMER_SECRET = "uxCIVsaPSsvckIBpSfZCLYGli0jHus4xMkE5sgk";
 
@@ -98,12 +91,12 @@ public class Main extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        if(Preferencias.getLogged(this)==true){
 
-                Intent intent = new Intent(getApplicationContext(),Profile.class);
-                startActivity(intent);
-                this.finish();
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        if (Preferencias.getLogged(this) == true) {
+            Intent intent = new Intent(getApplicationContext(), Profile.class);
+            startActivity(intent);
+            this.finish();
 
         }
         if (android.os.Build.VERSION.SDK_INT > 9) {
@@ -153,13 +146,12 @@ public class Main extends Activity {
         /**
          * Button click event for logout from twitter
          *
-        btnLogoutTwitter.setOnClickListener(new View.OnClickListener() {
+         btnLogoutTwitter.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View arg0) {
-                // Call logout twitter function
-                logoutFromTwitter();
-            }
+        @Override public void onClick(View arg0) {
+        // Call logout twitter function
+        logoutFromTwitter();
+        }
         });
          */
         if (!isTwitterLoggedInAlready()) {
@@ -171,8 +163,6 @@ public class Main extends Activity {
 
                 try {
                     // Get the access token
-
-
                     AccessToken accessToken = twitter.getOAuthAccessToken(
                             requestToken, verifier);
                     Preferencias.setOauthSecret(this, accessToken.getTokenSecret());
@@ -181,9 +171,9 @@ public class Main extends Activity {
 
                     Preferencias.setLogged(this, true);
 
-                    if(Preferencias.getLogged(getApplicationContext())){
+                    if (Preferencias.getLogged(getApplicationContext())) {
                         descargarFotos();
-                        Intent intent = new Intent(getApplicationContext(),Profile.class);
+                        Intent intent = new Intent(getApplicationContext(), Profile.class);
                         startActivity(intent);
 
                         this.finish();
@@ -193,10 +183,9 @@ public class Main extends Activity {
                     Log.e("Twitter Login Error", "> " + ex.getMessage());
                 }
             }
-        }
-        else {
+        } else {
             // Show Update Twitter
-            Intent intent = new Intent(this,Profile.class);
+            Intent intent = new Intent(this, Profile.class);
             startActivity(intent);
         }
 
@@ -212,24 +201,26 @@ public class Main extends Activity {
             urlfoto = user.getOriginalProfileImageURL();
             urlfondo = user.getProfileBannerURL();
             String color = user.getProfileLinkColor();
-            if(color.equals("FFFFFF")) color = "111111";
-            Preferencias.setProfileColor(this,Color.parseColor("#" + color));
+            if (color.equals("FFFFFF")) color = "111111";
+            Preferencias.setProfileColor(this, Color.parseColor("#" + color));
         } catch (TwitterException e) {
             e.printStackTrace();
         }
-        if(urlfoto!="")
+        if (urlfoto != "")
             try {
-                if(!urlfoto.equals(Preferencias.getPhotoURL(this))){
-                Bitmap profilepic = new DownloadImageTask((ImageView) findViewById(R.id.iv_photoUser))
-                        .execute(urlfoto).get();
-                Preferencias.setPhoto(this,encodeTobase64(profilepic));
-                Preferencias.setPhotoURL(this,urlfoto);}
+                if (!urlfoto.equals(Preferencias.getPhotoURL(this))) {
+                    Bitmap profilepic = new DownloadImageTask((ImageView) findViewById(R.id.iv_photoUser))
+                            .execute(urlfoto).get();
+                    Preferencias.setPhoto(this, encodeTobase64(profilepic));
+                    Preferencias.setPhotoURL(this, urlfoto);
+                }
 
-                if(!urlfondo.equals(Preferencias.getBannerURL(this))){
+                if (!urlfondo.equals(Preferencias.getBannerURL(this))) {
                     Bitmap profilebanner = new DownloadImageTask((ImageView) findViewById(R.id.imgBack))
                             .execute(urlfondo).get();
                     Preferencias.setBanner(this, encodeTobase64(profilebanner));
-                    Preferencias.setBannerURL(this,urlfondo);}
+                    Preferencias.setBannerURL(this, urlfondo);
+                }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {
@@ -241,7 +232,7 @@ public class Main extends Activity {
 
     /**
      * Function to login twitter
-     * */
+     */
     private void loginToTwitter() {
         // Check if already logged in
         if (!isTwitterLoggedInAlready()) {
@@ -276,7 +267,7 @@ public class Main extends Activity {
 
         /**
          * Before starting background thread Show Progress Dialog
-         * */
+         */
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -289,7 +280,7 @@ public class Main extends Activity {
 
         /**
          * getting Places JSON
-         * */
+         */
         protected String doInBackground(String... args) {
             Log.d("Tweet Text", "> " + args[0]);
             String status = args[0];
@@ -322,7 +313,8 @@ public class Main extends Activity {
          * After completing background task Dismiss the progress dialog and show
          * the data in UI Always use runOnUiThread(new Runnable()) to update UI
          * from background thread, otherwise you will get error
-         * **/
+         * *
+         */
         protected void onPostExecute(String file_url) {
             // dismiss the dialog after getting all products
             pDialog.dismiss();
@@ -350,7 +342,7 @@ public class Main extends Activity {
     /**
      * Check user already logged in your application using twitter Login flag is
      * fetched from Shared Preferences
-     * */
+     */
     private boolean isTwitterLoggedInAlready() {
         // return twitter login status from Shared Preferences
         return Preferencias.getLogged(this);
@@ -367,6 +359,7 @@ public class Main extends Activity {
         public LoginTask() {
             progressDialog = ProgressDialog.show(Main.this, "", "Loading. Please wait...", false);
         }
+
         @Override
         protected RequestToken doInBackground(Void... params) {
             // TODO Auto-generated method stub
@@ -402,7 +395,7 @@ public class Main extends Activity {
                 requestToken = result;
                 Main.this.startActivity(new Intent(Intent.ACTION_VIEW, Uri
                         .parse(requestToken.getAuthenticationURL())));
-            } catch(Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 alert.showAlertDialog(Main.this, "Internet Connection Timeout Error",
                         "Please try later.", false);
@@ -410,14 +403,15 @@ public class Main extends Activity {
         }
 
     }
+
     /**
      * Function to get timeline
-     * */
+     */
     class getTimeLine extends AsyncTask<Void, Void, String> {
 
         /**
          * Before starting background thread Show Progress Dialog
-         * */
+         */
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -430,7 +424,7 @@ public class Main extends Activity {
 
         /**
          * getting Places JSON
-         * */
+         */
         protected String doInBackground(Void... args) {
 
             try {
@@ -455,7 +449,7 @@ public class Main extends Activity {
                 System.out.println("Showing @" + user.getScreenName()
                         + "'s home timeline.");
                 for (twitter4j.Status status : statuses) {
-                    Log.d("Twitter","@" + status.getUser().getScreenName()
+                    Log.d("Twitter", "@" + status.getUser().getScreenName()
                             + " - " + status.getText());
                 }
 

@@ -31,10 +31,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/jugar"
                 android:id="@+id/bntJugar"
-                android:layout_gravity="center"
-                android:textSize="30dp"
-                android:background="@drawable/selector_button"
-                android:layout_margin="5dp" />
+                android:textSize="32dp"
+                android:background="@drawable/selector_button" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -48,9 +46,8 @@
                 android:text="@string/clasificacion"
                 android:id="@+id/btnClasificacion"
                 android:layout_gravity="center"
-                android:textSize="30dp"
-                android:background="@drawable/selector_button"
-                android:layout_margin="5dp" />
+                android:textSize="32dp"
+                android:background="@drawable/selector_button" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -64,9 +61,8 @@
                 android:text="@string/opciones"
                 android:id="@+id/btnOpciones"
                 android:layout_gravity="center"
-                android:textSize="30dp"
-                android:background="@drawable/selector_button"
-                android:layout_margin="5dp" />
+                android:textSize="32dp"
+                android:background="@drawable/selector_button" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -80,9 +76,8 @@
                 android:text="@string/salir"
                 android:id="@+id/btnSalir"
                 android:layout_gravity="center"
-                android:textSize="30dp"
-                android:background="@drawable/selector_button"
-                android:layout_margin="5dp" />
+                android:textSize="32dp"
+                android:background="@drawable/selector_button" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -94,7 +89,7 @@
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="120dp"
+        android:layout_height="140dp"
         android:id="@+id/imgBack"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
@@ -106,8 +101,8 @@
         app:border_color="@color/text"
         app:border_width="2dp"
         app:shadow="true"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         android:id="@+id/iv_photoUser"
         android:src="@drawable/photo_user_no"
         android:layout_centerHorizontal="true"
@@ -122,7 +117,6 @@
         android:paddingBottom="10dp"
         android:paddingRight="10dp"
         android:paddingLeft="10dp"
-        android:layout_margin="5dp"
         android:background="@drawable/layers_gplus_button_bg"
         android:text="@string/logouttwitter"
         android:layout_alignParentBottom="true"
