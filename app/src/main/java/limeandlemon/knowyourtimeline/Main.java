@@ -38,33 +38,30 @@ import util.Preferencias;
 
 public class Main extends Activity {
     // Constants
+    static final String PREF_KEY_OAUTH_TOKEN = "oauth_token";
+    static final String PREF_KEY_OAUTH_SECRET = "oauth_token_secret";
+    static final String PREF_KEY_TWITTER_LOGIN = "isTwitterLogedIn";
+    static final String TWITTER_CALLBACK_URL = "oauth://t4jsample";
+    // Twitter oauth urls
+    static final String URL_TWITTER_AUTH = "auth_url";
+    static final String URL_TWITTER_OAUTH_VERIFIER = "oauth_verifier";
+    static final String URL_TWITTER_OAUTH_TOKEN = "oauth_token";
     /**
      * Register your here app https://dev.twitter.com/apps/new and get your
      * consumer key and secret
      */
     static String TWITTER_CONSUMER_KEY = "o4YaT3H0SgmjQFSkGJy1A";
     static String TWITTER_CONSUMER_SECRET = "uxCIVsaPSsvckIBpSfZCLYGli0jHus4xMkE5sgk";
-
     // Preference Constants
     static String PREFERENCE_NAME = "twitter_oauth";
-    static final String PREF_KEY_OAUTH_TOKEN = "oauth_token";
-    static final String PREF_KEY_OAUTH_SECRET = "oauth_token_secret";
-    static final String PREF_KEY_TWITTER_LOGIN = "isTwitterLogedIn";
-
-    static final String TWITTER_CALLBACK_URL = "oauth://t4jsample";
-
-    // Twitter oauth urls
-    static final String URL_TWITTER_AUTH = "auth_url";
-    static final String URL_TWITTER_OAUTH_VERIFIER = "oauth_verifier";
-    static final String URL_TWITTER_OAUTH_TOKEN = "oauth_token";
-
+    // Twitter
+    private static Twitter twitter;
+    private static RequestToken requestToken;
     // Login button
     Button btnLoginTwitter;
     // Update status button
     Button btnUpdateStatus;
-
     Button btnGetTimeLine;
-
     // Logout button
     Button btnLogoutTwitter;
     // EditText for update
@@ -72,20 +69,23 @@ public class Main extends Activity {
     // lbl update
     TextView lblUpdate;
     TextView lblUserName;
-
     // Progress dialog
     ProgressDialog pDialog;
-
-    // Twitter
-    private static Twitter twitter;
-    private static RequestToken requestToken;
-
-
+    // Alert Dialog Manager
+    AlertDialogManager alert = new AlertDialogManager();
     // Internet Connection detector
     private ConnectionDetector cd;
 
-    // Alert Dialog Manager
-    AlertDialogManager alert = new AlertDialogManager();
+    public static String encodeTobase64(Bitmap image) {
+        Bitmap immage = image;
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        immage.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        byte[] b = baos.toByteArray();
+        String imageEncoded = Base64.encodeToString(b, Base64.DEFAULT);
+
+        Log.d("Image Log:", imageEncoded);
+        return imageEncoded;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -260,6 +260,24 @@ public class Main extends Activity {
         }
     }
 
+    /**
+     * Function to logout from twitter It will just clear the application shared
+     * preferences
+     * */
+
+    /**
+     * Check user already logged in your application using twitter Login flag is
+     * fetched from Shared Preferences
+     */
+    private boolean isTwitterLoggedInAlready() {
+        // return twitter login status from Shared Preferences
+        return Preferencias.getLogged(this);
+    }
+
+    protected void onResume() {
+        super.onResume();
+    }
+
     /*
      * Function to update status
      * */
@@ -331,25 +349,6 @@ public class Main extends Activity {
             });
         }
 
-    }
-
-    /**
-     * Function to logout from twitter It will just clear the application shared
-     * preferences
-     * */
-
-
-    /**
-     * Check user already logged in your application using twitter Login flag is
-     * fetched from Shared Preferences
-     */
-    private boolean isTwitterLoggedInAlready() {
-        // return twitter login status from Shared Preferences
-        return Preferencias.getLogged(this);
-    }
-
-    protected void onResume() {
-        super.onResume();
     }
 
     public class LoginTask extends AsyncTask<Void, Void, RequestToken> {
@@ -499,17 +498,5 @@ public class Main extends Activity {
         protected void onPostExecute(Bitmap result) {
             //bmImage.setImageBitmap(result);
         }
-    }
-
-
-    public static String encodeTobase64(Bitmap image) {
-        Bitmap immage = image;
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        immage.compress(Bitmap.CompressFormat.PNG, 100, baos);
-        byte[] b = baos.toByteArray();
-        String imageEncoded = Base64.encodeToString(b, Base64.DEFAULT);
-
-        Log.d("Image Log:", imageEncoded);
-        return imageEncoded;
     }
 }

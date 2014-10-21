@@ -12,6 +12,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Base64;
 import android.util.Log;
 import android.util.TypedValue;
@@ -27,7 +28,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import java.text.DecimalFormat;
@@ -36,6 +36,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import twitter4j.IDs;
 import twitter4j.Paging;
@@ -54,7 +56,7 @@ public class Game extends Activity {
 
     static String TWITTER_CONSUMER_KEY = "o4YaT3H0SgmjQFSkGJy1A";
     static String TWITTER_CONSUMER_SECRET = "uxCIVsaPSsvckIBpSfZCLYGli0jHus4xMkE5sgk";
-    RelativeLayout pregunta;
+    RelativeLayout pregunta, answers;
     LinearLayout layoutRespuestas;
     List<twitter4j.Status> statuses;
     List<Long> friends;
@@ -63,21 +65,24 @@ public class Game extends Activity {
     int preguntaLength;
     ArrayList<User> respuestas;
     int aciertos, fallos;
-    ScrollView scroll;
     TextViewEx txtPregunta;
     Typeface tf;
     Animation left_to_right_animation, right_to_left_animation, scale;
     Twitter twitter;
     ProgressBar pDialog;
+
+    public static Bitmap decodeBase64(String input) {
+        byte[] decodedByte = Base64.decode(input, 0);
+        return BitmapFactory
+                .decodeByteArray(decodedByte, 0, decodedByte.length);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         db = new InternalDBHandler(this).getWritableDatabase();
-        scroll = (ScrollView) findViewById(R.id.scrollView);
-
-        scroll.setBackgroundColor(getResources().getColor(R.color.text));
         left_to_right_animation = AnimationUtils.loadAnimation(this, R.anim.left_to_right);
         right_to_left_animation = AnimationUtils.loadAnimation(this, R.anim.right_to_left);
         scale = AnimationUtils.loadAnimation(this, R.anim.scale);
@@ -99,9 +104,13 @@ public class Game extends Activity {
         respuestas = new ArrayList<User>();
         pDialog = (ProgressBar) findViewById(R.id.progressBar);
         pregunta = (RelativeLayout) findViewById(R.id.relativePregunta);
+        answers = (RelativeLayout) findViewById(R.id.relativeLayout);
         layoutRespuestas = (LinearLayout) findViewById(R.id.linearRespuestas);
         final ImageView imgperfil = (ImageView) findViewById(R.id.iv_photoUser);
         txtPregunta = (TextViewEx) findViewById(R.id.txtPregunta);
+
+        txtPregunta.setBackgroundColor(getResources().getColor(R.color.text));
+        txtPregunta.setMovementMethod(new ScrollingMovementMethod());
         txtPregunta.setTypeface(tf);
         imgperfil.setImageBitmap(decodeBase64(Preferencias.getPhoto(this)));
         RelativeLayout frame1 = (RelativeLayout) findViewById(R.id.frameLayout);
@@ -116,22 +125,19 @@ public class Game extends Activity {
     }
 
     private String seleccionarPregunta() {
-        Log.e("respuestas", statuses.isEmpty() + "");
         while (!statuses.isEmpty()) {
             Random randomizer = new Random();
             int num = randomizer.nextInt(statuses.size());
             respuesta = statuses.get(num).getUser();
-            Log.e("id", statuses.get(num).getId() + "");
-            Log.e("id", comprobarRespondido(statuses.get(num).getId()) + "");
             if (comprobarRespondido(statuses.get(num).getId())) statuses.remove(num);
             else {
                 respuestas.add(respuesta);
                 registrarPregunta(statuses.get(num).getId());
                 preguntaLength = statuses.get(num).getText().length();
-                Log.e("length", preguntaLength + " " + statuses.get(num).getText());
-                return statuses.get(num).getText();
+                return removeUrl(statuses.get(num).getText());
             }
         }
+        this.finish();
         return "Ya no quedan más tweets...";
     }
 
@@ -153,26 +159,27 @@ public class Game extends Activity {
         return false;
     }
 
-
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private void mostrarRespuestas() {
         Collections.shuffle(respuestas);
 
-        for(int i = 0;i < respuestas.size();i++){
-        final Button resp = new Button(this);
-        resp.setText(respuestas.get(i).getName());
-        resp.setLayoutParams(new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT));
+        for (int i = 0; i < respuestas.size(); i++) {
+            final Button resp = new Button(this);
+            resp.setText(respuestas.get(i).getName());
+            resp.setLayoutParams(new ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT));
             resp.setTypeface(tf);
             resp.setTextSize(20);
             resp.setBackground(getResources().getDrawable(R.drawable.selector_button));
             resp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(((Button)view).getText().toString().equals(respuesta.getName())){
-                        updateAciertos(aciertos+1);
-                        aciertos = aciertos+1;
+
+                    layoutRespuestas.removeAllViews();
+                    if (((Button) view).getText().toString().equals(respuesta.getName())) {
+                        aciertos = aciertos + 1;
+                        updateAciertos(aciertos);
                         cambiarPuntuacion();
                         pregunta.startAnimation(right_to_left_animation);
 
@@ -181,7 +188,7 @@ public class Game extends Activity {
                             @Override
                             public void onAnimationStart(Animation animation) {
                                 // TODO Auto-generated method stub
-                                scroll.setBackgroundColor(getResources().getColor(R.color.acierto));
+                                txtPregunta.setBackgroundColor(getResources().getColor(R.color.acierto));
                             }
 
                             @Override
@@ -194,8 +201,8 @@ public class Game extends Activity {
                             public void onAnimationEnd(Animation animation) {
                                 try {
 
-                                    moveViewDown(pregunta);
-                                    scroll.setBackgroundColor(getResources().getColor(R.color.text));
+                                    moveViewDownQuick(pregunta);
+                                    txtPregunta.setBackgroundColor(getResources().getColor(R.color.text));
                                     mostrarOtraPregunta();
 
                                 } catch (TwitterException e) {
@@ -205,9 +212,10 @@ public class Game extends Activity {
                         });
 
 
-                    }else {
-                        updateFallos(fallos+1);
-                        fallos = fallos+1;
+                    } else {
+
+                        fallos = fallos + 1;
+                        updateFallos(fallos);
                         cambiarPuntuacion();
                         pregunta.startAnimation(left_to_right_animation);
 
@@ -217,7 +225,7 @@ public class Game extends Activity {
                             public void onAnimationStart(Animation animation) {
                                 // TODO Auto-generated method stub
 
-                                scroll.setBackgroundColor(getResources().getColor(R.color.fallo));
+                                txtPregunta.setBackgroundColor(getResources().getColor(R.color.fallo));
                             }
 
                             @Override
@@ -230,10 +238,9 @@ public class Game extends Activity {
                             public void onAnimationEnd(Animation animation) {
                                 try {
 
-                                    scroll.setBackgroundColor(getResources().getColor(R.color.text));
-                                    moveViewDown(pregunta);
+                                    txtPregunta.setBackgroundColor(getResources().getColor(R.color.text));
+                                    moveViewDownQuick(pregunta);
                                     mostrarOtraPregunta();
-
                                 } catch (TwitterException e) {
                                     e.printStackTrace();
                                 }
@@ -242,7 +249,7 @@ public class Game extends Activity {
                     }
                 }
             });
-        layoutRespuestas.addView(resp);
+            layoutRespuestas.addView(resp);
             if (i != 3)
                 addDividier();
         }
@@ -273,22 +280,20 @@ public class Game extends Activity {
         respuestas.clear();
         layoutRespuestas.removeAllViews();
 
-        txtPregunta.setText(seleccionarPregunta(), true);
-        if (preguntaLength < 40) txtPregunta.setTextSize(TypedValue.COMPLEX_UNIT_SP, 35);
-        else if (preguntaLength < 80) txtPregunta.setTextSize(TypedValue.COMPLEX_UNIT_SP, 32);
-        else if (preguntaLength > 80 && preguntaLength < 120)
+        txtPregunta.setText(seleccionarPregunta() + "\n", true);
+        if (preguntaLength < 120)
             txtPregunta.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
         else txtPregunta.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
-        Log.e("tamaño", txtPregunta.getTextSize() + "");
         seleccionarRespuestaAzar();
     }
+
     private void seleccionarRespuestaAzar() throws TwitterException {
         Random randomizer = new Random();
         int i = 1;
-        while(i<4) {
+        while (i < 4) {
             int num = randomizer.nextInt(friends.size());
             User user = twitter.showUser(friends.get(num));
-            if(!respuestas.contains(user)){
+            if (!respuestas.contains(user)) {
                 respuestas.add(user);
                 i++;
             }
@@ -315,12 +320,6 @@ public class Game extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    public static Bitmap decodeBase64(String input) {
-        byte[] decodedByte = Base64.decode(input, 0);
-        return BitmapFactory
-                .decodeByteArray(decodedByte, 0, decodedByte.length);
-    }
-
     private void moveViewDown(final View view) {
         Animation slide = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
         view.startAnimation(slide);
@@ -329,6 +328,40 @@ public class Game extends Activity {
     private void moveViewDownSlow(final View view) {
         Animation slide = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down_slow);
         view.startAnimation(slide);
+    }
+
+    private void moveViewDownQuick(final View view) {
+        Animation slide = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down_quick);
+        view.startAnimation(slide);
+    }
+
+    private void addDividier() {
+        ImageView v = new ImageView(this);
+        v.setImageResource(R.drawable.divisor);
+        layoutRespuestas.addView(v);
+    }
+
+    public void updateAciertos(double aciertos) {
+        db.execSQL("UPDATE Puntuacion SET Aciertos=" + aciertos + ";");
+    }
+
+    public void updateFallos(double fallos) {
+        db.execSQL("UPDATE Puntuacion SET Fallos=" + fallos + ";");
+    }
+
+    public void getAciertosFallos() {
+        String sql = "SELECT * FROM Puntuacion;";
+        Cursor cursor = db.rawQuery(sql, null);
+        if (cursor.getCount() == 1) {
+            cursor.moveToFirst();
+            int aciertos = cursor.getInt(cursor.getColumnIndex("Aciertos"));
+            this.aciertos = aciertos;
+
+            int fallos = cursor.getInt(cursor.getColumnIndex("Fallos"));
+            this.fallos = fallos;
+            cursor.close();
+        }
+        cursor.close();
     }
 
     /**
@@ -348,14 +381,13 @@ public class Game extends Activity {
         protected void onPostExecute(String file_url) {
             super.onPostExecute("");
             pDialog.setVisibility(View.GONE);
-            txtPregunta.setText(seleccionarPregunta(), true);
-            if (preguntaLength < 40) txtPregunta.setTextSize(TypedValue.COMPLEX_UNIT_SP, 35);
-            else if (preguntaLength < 80) txtPregunta.setTextSize(TypedValue.COMPLEX_UNIT_SP, 32);
-            else if (preguntaLength > 80 && preguntaLength < 120)
+            txtPregunta.setText(seleccionarPregunta() + "\n", true);
+            if (preguntaLength < 120)
                 txtPregunta.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
             else txtPregunta.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
             new getFriendList().execute();
         }
+
         /**
          * getting Places JSON
          */
@@ -380,7 +412,7 @@ public class Game extends Activity {
                 Paging paging = new Paging();
                 paging.setCount(100);
                 statuses = twitter.getHomeTimeline(paging);
-                for (Iterator<twitter4j.Status> iterator = statuses.iterator(); iterator.hasNext();) {
+                for (Iterator<twitter4j.Status> iterator = statuses.iterator(); iterator.hasNext(); ) {
                     twitter4j.Status tweet = iterator.next();
                     if (tweet.isRetweet()) {
                         iterator.remove();
@@ -395,6 +427,7 @@ public class Game extends Activity {
         }
 
     }
+
     class getFriendList extends AsyncTask<Void, Void, String> {
 
         /**
@@ -406,6 +439,7 @@ public class Game extends Activity {
             pDialog.setIndeterminate(true);
             pDialog.setVisibility(View.VISIBLE);
         }
+
         protected void onPostExecute(String file_url) {
             super.onPostExecute("");
             pDialog.setVisibility(View.GONE);
@@ -416,53 +450,41 @@ public class Game extends Activity {
                 e.printStackTrace();
             }
         }
+
         /**
          * getting Places JSON
          */
         protected String doInBackground(Void... args) {
 
             try {
-                    long cursor = -1;
-                    IDs ids;
-                    System.out.println("Listing following ids.");
-                    do {
-                        ids = twitter.getFriendsIDs(cursor);
-                        for (long id : ids.getIDs()) {
-                            if(id!=-1)
+                long cursor = -1;
+                IDs ids;
+                System.out.println("Listing following ids.");
+                do {
+                    ids = twitter.getFriendsIDs(cursor);
+                    for (long id : ids.getIDs()) {
+                        if (id != -1)
                             friends.add(id);
-                        }
-                    } while ((cursor = ids.getNextCursor()) != 0);
-                } catch (TwitterException te) {
-                    te.printStackTrace();
-                    System.out.println("Failed to get friends' ids: " + te.getMessage());
-                }
+                    }
+                } while ((cursor = ids.getNextCursor()) != 0);
+            } catch (TwitterException te) {
+                te.printStackTrace();
+                System.out.println("Failed to get friends' ids: " + te.getMessage());
+            }
             return null;
         }
 
     }
-    private void addDividier() {
-        ImageView v = new ImageView(this);
-        v.setImageResource(R.drawable.divisor);
-        layoutRespuestas.addView(v);
-    }
-    public void updateAciertos(double aciertos) {
-        db.execSQL("UPDATE Puntuacion SET Aciertos="+aciertos+";");
-    }
-    public void updateFallos(double fallos) {
-        db.execSQL("UPDATE Puntuacion SET Fallos="+fallos+";");
-    }
-    public void getAciertosFallos() {
-        String sql = "SELECT * FROM Puntuacion;";
-        Cursor cursor = db.rawQuery(sql, null);
-        if (cursor.getCount() == 1) {
-            cursor.moveToFirst();
-            int aciertos = cursor.getInt(cursor.getColumnIndex("Aciertos"));
-            this.aciertos = aciertos;
 
-            int fallos = cursor.getInt(cursor.getColumnIndex("Fallos"));
-            this.fallos = fallos;
-            cursor.close();
+    private String removeUrl(String commentstr) {
+        String urlPattern = "((https?|ftp|gopher|telnet|file|Unsure|http):((//)|(\\\\))+[\\w\\d:#@%/;$()~_?\\+-=\\\\\\.&]*)";
+        Pattern p = Pattern.compile(urlPattern, Pattern.CASE_INSENSITIVE);
+        Matcher m = p.matcher(commentstr);
+        int i = 0;
+        while (m.find()) {
+            commentstr = commentstr.replaceAll(m.group(i), "").trim();
+            i++;
         }
-        cursor.close();
+        return commentstr;
     }
 }

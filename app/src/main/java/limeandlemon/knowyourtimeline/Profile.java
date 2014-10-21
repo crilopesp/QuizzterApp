@@ -6,53 +6,42 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.Typeface;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Base64;
-import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.concurrent.ExecutionException;
-
-import twitter4j.Twitter;
-import twitter4j.TwitterException;
-import twitter4j.TwitterFactory;
-import twitter4j.User;
-import twitter4j.auth.AccessToken;
-import twitter4j.conf.ConfigurationBuilder;
 import util.Preferencias;
 
 
 public class Profile extends Activity {
     static String TWITTER_CONSUMER_KEY = "o4YaT3H0SgmjQFSkGJy1A";
     static String TWITTER_CONSUMER_SECRET = "uxCIVsaPSsvckIBpSfZCLYGli0jHus4xMkE5sgk";
-    ImageView imgperfil;
-    ImageView imgback;
     // Preference Constants
     static String PREFERENCE_NAME = "twitter_oauth";
     // Shared Preferences
     private static SharedPreferences mSharedPreferences;
+    ImageView imgperfil;
+    ImageView imgback;
+
+    public static Bitmap decodeBase64(String input) {
+        byte[] decodedByte = Base64.decode(input, 0);
+        return BitmapFactory
+                .decodeByteArray(decodedByte, 0, decodedByte.length);
+    }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         onCreate(null);
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,7 +60,7 @@ public class Profile extends Activity {
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent(getApplicationContext(),Game.class);
+                Intent intent = new Intent(getApplicationContext(), Game.class);
                 startActivity(intent);
             }
         });
@@ -112,8 +101,6 @@ public class Profile extends Activity {
 
     }
 
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -123,17 +110,17 @@ public class Profile extends Activity {
 
     private void logoutFromTwitter() {
         // Clear the shared preferences
-        Preferencias.setOauthSecret(this,"");
+        Preferencias.setOauthSecret(this, "");
 
-        Preferencias.setOauthToken(this,"");
+        Preferencias.setOauthToken(this, "");
 
         Preferencias.setLogged(this, false);
-        Preferencias.setBanner(this,"");
-        Preferencias.setBannerURL(this,"");
-        Preferencias.setPhotoURL(this,"");
-        Preferencias.setPhoto(this,"");
+        Preferencias.setBanner(this, "");
+        Preferencias.setBannerURL(this, "");
+        Preferencias.setPhotoURL(this, "");
+        Preferencias.setPhoto(this, "");
 
-        Intent intent = new Intent(this,Main.class);
+        Intent intent = new Intent(this, Main.class);
         startActivity(intent);
         this.finish();
     }
@@ -155,23 +142,15 @@ public class Profile extends Activity {
         view.setBackgroundColor(color);
     }
 
-
-    private void moveViewUp( final View view )
-    {
+    private void moveViewUp(final View view) {
         Animation slide = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_up);
 
         view.startAnimation(slide);
 
     }
-    private void moveViewDown( final View view )
-    {
+
+    private void moveViewDown(final View view) {
         Animation slide = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
         view.startAnimation(slide);
-    }
-
-    public static Bitmap decodeBase64(String input) {
-        byte[] decodedByte = Base64.decode(input, 0);
-        return BitmapFactory
-                .decodeByteArray(decodedByte, 0, decodedByte.length);
     }
 }

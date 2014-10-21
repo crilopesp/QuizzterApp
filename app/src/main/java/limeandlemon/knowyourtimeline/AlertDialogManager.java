@@ -8,16 +8,12 @@ public class AlertDialogManager {
     /**
      * Function to display simple Alert Dialog
      *
-     * @param context
-     *            - application context
-     * @param title
-     *            - alert dialog title
-     * @param message
-     *            - alert message
-     * @param status
-     *            - success/failure (used to set icon) - pass null if you don't
-     *            want icon
-     * */
+     * @param context - application context
+     * @param title   - alert dialog title
+     * @param message - alert message
+     * @param status  - success/failure (used to set icon) - pass null if you don't
+     *                want icon
+     */
 
     public void showAlertDialog(Context context, String title, String message,
                                 Boolean status) {
