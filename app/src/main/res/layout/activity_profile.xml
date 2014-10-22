@@ -5,13 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="limeandlemon.knowyourtimeline.Profile"
-    android:background="@color/text">
+    android:background="@color/color3">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/imgBack">
+        android:layout_below="@+id/imgBack"
+        android:id="@+id/linearLayout">
 
         <LinearLayout
             android:orientation="vertical"
@@ -20,70 +21,91 @@
             android:layout_gravity="center"
             android:gravity="center">
 
-            <ImageView
-                android:layout_width="wrap_content"
+            <FrameLayout
+                android:layout_width="220dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/imageView4"
-                android:src="@drawable/divisor" />
+                android:background="@color/color1"
+                android:layout_marginBottom="5dp"
+                android:focusable="false"
+                android:paddingBottom="3dp"
+                android:layout_margin="5dp">
 
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/jugar"
-                android:id="@+id/bntJugar"
-                android:textSize="32dp"
-                android:background="@drawable/selector_button" />
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/jugar"
+                    android:id="@+id/bntJugar"
+                    android:textSize="32dp"
+                    android:background="@drawable/selector_button_menu"
+                    android:layout_marginBottom="5dp"
+                    android:textColor="@color/text" />
+            </FrameLayout>
 
-            <ImageView
-                android:layout_width="wrap_content"
+            <FrameLayout
+                android:layout_width="220dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/imageView"
-                android:src="@drawable/divisor" />
+                android:background="@color/color1"
+                android:layout_marginBottom="5dp"
+                android:focusable="false"
+                android:paddingBottom="3dp"
+                android:layout_margin="5dp">
 
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/clasificacion"
-                android:id="@+id/btnClasificacion"
-                android:layout_gravity="center"
-                android:textSize="32dp"
-                android:background="@drawable/selector_button" />
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/clasificacion"
+                    android:id="@+id/btnClasificacion"
+                    android:layout_gravity="center"
+                    android:textSize="32dp"
+                    android:background="@drawable/selector_button_menu"
+                    android:layout_marginBottom="3dp"
+                    android:textColor="@color/text" />
+            </FrameLayout>
 
-            <ImageView
-                android:layout_width="wrap_content"
+            <FrameLayout
+                android:layout_width="220dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/imageView2"
-                android:src="@drawable/divisor" />
+                android:id="@+id/frameLayout"
+                android:background="@color/color1"
+                android:layout_marginBottom="5dp"
+                android:focusable="false"
+                android:paddingBottom="3dp"
+                android:layout_margin="5dp">
 
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/opciones"
-                android:id="@+id/btnOpciones"
-                android:layout_gravity="center"
-                android:textSize="32dp"
-                android:background="@drawable/selector_button" />
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/opciones"
+                    android:id="@+id/btnOpciones"
+                    android:layout_gravity="center"
+                    android:textSize="32dp"
+                    android:background="@drawable/selector_button_menu"
+                    android:layout_marginBottom="3dp"
+                    android:textColor="@color/text" />
+            </FrameLayout>
 
-            <ImageView
-                android:layout_width="wrap_content"
+            <FrameLayout
+                android:layout_width="220dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/imageView3"
-                android:src="@drawable/divisor" />
+                android:id="@+id/frameLayout2"
+                android:background="@color/color1"
+                android:layout_marginBottom="5dp"
+                android:focusable="false"
+                android:paddingBottom="3dp"
+                android:layout_margin="5dp">
 
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/salir"
-                android:id="@+id/btnSalir"
-                android:layout_gravity="center"
-                android:textSize="32dp"
-                android:background="@drawable/selector_button" />
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/salir"
+                    android:id="@+id/btnSalir"
+                    android:layout_gravity="center"
+                    android:textSize="32dp"
+                    android:background="@drawable/selector_button_menu"
+                    android:layout_marginBottom="3dp"
+                    android:textColor="@color/text" />
+            </FrameLayout>
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/imageView5"
-                android:src="@drawable/divisor" />
         </LinearLayout>
     </LinearLayout>
 
@@ -94,36 +116,54 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:adjustViewBounds="true"
-        android:scaleType="centerCrop" />
+        android:scaleType="centerCrop"
+        android:background="@color/color1"
+        android:layout_alignBottom="@+id/iv_photoUser" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/linearLayout"
+        android:background="@color/color2"
+        android:textSize="40sp"
+        android:textColor="@color/text"
+        android:text="@string/app_name"
+        android:gravity="center"></TextView>
 
     <util.CircularImageView
         app:border="true"
         app:border_color="@color/text"
         app:border_width="2dp"
         app:shadow="true"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:id="@+id/iv_photoUser"
         android:src="@drawable/photo_user_no"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="60dp" />
-
-    <Button
-        style="@style/ButtonText"
-        android:id="@+id/btnLogout"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:paddingRight="10dp"
-        android:paddingLeft="10dp"
-        android:background="@drawable/layers_gplus_button_bg"
-        android:text="@string/logouttwitter"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="false"
-        android:layout_alignParentLeft="false"
-        android:layout_alignParentRight="false"
-        android:layout_alignWithParentIfMissing="false"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#ff530001"
+        android:layout_marginBottom="5dp"
+        android:focusable="false"
+        android:paddingBottom="3dp"
+        android:layout_margin="5dp"
+        android:id="@+id/frameLayout4"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnLogout"
+            android:layout_gravity="center"
+            android:textSize="20sp"
+            android:text="@string/logouttwitter"
+            android:background="@drawable/button_gplus_bg"
+            android:layout_marginBottom="3dp"
+            android:textColor="@color/text" />
+    </FrameLayout>
 
 </RelativeLayout>

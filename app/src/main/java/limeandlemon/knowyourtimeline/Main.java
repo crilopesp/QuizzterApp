@@ -4,26 +4,17 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import twitter4j.Paging;
 import twitter4j.Twitter;
@@ -32,7 +23,6 @@ import twitter4j.TwitterFactory;
 import twitter4j.User;
 import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
-import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
 import util.Preferencias;
 
@@ -46,12 +36,16 @@ public class Main extends Activity {
     static final String URL_TWITTER_AUTH = "auth_url";
     static final String URL_TWITTER_OAUTH_VERIFIER = "oauth_verifier";
     static final String URL_TWITTER_OAUTH_TOKEN = "oauth_token";
+
+    static String TWITTER_CONSUMER_KEY = "o4YaT3H0SgmjQFSkGJy1A";
+    static String TWITTER_CONSUMER_SECRET = "uxCIVsaPSsvckIBpSfZCLYGli0jHus4xMkE5sgk";
+
+    public static final int TWITTER_LOGIN_RESULT_CODE_SUCCESS = 1;
+    public static final int TWITTER_LOGIN_RESULT_CODE_FAILURE = 2;
     /**
      * Register your here app https://dev.twitter.com/apps/new and get your
      * consumer key and secret
      */
-    static String TWITTER_CONSUMER_KEY = "o4YaT3H0SgmjQFSkGJy1A";
-    static String TWITTER_CONSUMER_SECRET = "uxCIVsaPSsvckIBpSfZCLYGli0jHus4xMkE5sgk";
     // Preference Constants
     static String PREFERENCE_NAME = "twitter_oauth";
     // Twitter
@@ -75,18 +69,6 @@ public class Main extends Activity {
     AlertDialogManager alert = new AlertDialogManager();
     // Internet Connection detector
     private ConnectionDetector cd;
-
-    public static String encodeTobase64(Bitmap image) {
-        Bitmap immage = image;
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        immage.compress(Bitmap.CompressFormat.PNG, 100, baos);
-        byte[] b = baos.toByteArray();
-        String imageEncoded = Base64.encodeToString(b, Base64.DEFAULT);
-
-        Log.d("Image Log:", imageEncoded);
-        return imageEncoded;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,16 +97,6 @@ public class Main extends Activity {
             // stop executing code by return
             return;
         }
-        // Check if twitter keys are set
-        if (TWITTER_CONSUMER_KEY.trim().length() == 0
-                || TWITTER_CONSUMER_SECRET.trim().length() == 0) {
-            // Internet Connection is not present
-            alert.showAlertDialog(Main.this, "Twitter oAuth tokens",
-                    "Please set your twitter oauth tokens first!", false);
-            // stop executing code by return
-            return;
-        }
-
         btnLoginTwitter = (Button) findViewById(R.id.button);
 
 
@@ -136,143 +108,29 @@ public class Main extends Activity {
             @Override
             public void onClick(View arg0) {
                 // Call login twitter function
-                loginToTwitter();
+                Intent i = new Intent(getApplicationContext(), TwitterLoginActivity.class);
+                startActivityForResult(i, 1);
 
 
             }
         });
+    }
 
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        /**
-         * Button click event for logout from twitter
-         *
-         btnLogoutTwitter.setOnClickListener(new View.OnClickListener() {
+        if (requestCode == 1) {
+            if (resultCode == TWITTER_LOGIN_RESULT_CODE_SUCCESS) {
 
-        @Override public void onClick(View arg0) {
-        // Call logout twitter function
-        logoutFromTwitter();
-        }
-        });
-         */
-        if (!isTwitterLoggedInAlready()) {
-            Uri uri = getIntent().getData();
-            if (uri != null && uri.toString().startsWith(TWITTER_CALLBACK_URL)) {
-                // oAuth verifier
-                String verifier = uri
-                        .getQueryParameter(URL_TWITTER_OAUTH_VERIFIER);
-
-                try {
-                    // Get the access token
-                    AccessToken accessToken = twitter.getOAuthAccessToken(
-                            requestToken, verifier);
-                    Preferencias.setOauthSecret(this, accessToken.getTokenSecret());
-
-                    Preferencias.setOauthToken(this, accessToken.getToken());
-
-                    Preferencias.setLogged(this, true);
-
-                    if (Preferencias.getLogged(getApplicationContext())) {
-                        descargarFotos();
-                        Intent intent = new Intent(getApplicationContext(), Profile.class);
-                        startActivity(intent);
-
-                        this.finish();
-                    }
-                } catch (Exception ex) {
-                    // Check log for login errors
-                    Log.e("Twitter Login Error", "> " + ex.getMessage());
-                }
+                Intent intent = new Intent(getApplicationContext(), Profile.class);
+                startActivity(intent);
+                Preferencias.setLogged(this, true);
+                this.finish();
             }
-        } else {
-            // Show Update Twitter
-            Intent intent = new Intent(this, Profile.class);
-            startActivity(intent);
-        }
-
-    }
-
-    private void descargarFotos() {
-        String urlfoto = "";
-        String urlfondo = "";
-        String nombreuser = "";
-        // Update status
-        try {
-            User user = twitter.showUser(twitter.getId());
-            urlfoto = user.getOriginalProfileImageURL();
-            urlfondo = user.getProfileBannerURL();
-            String color = user.getProfileLinkColor();
-            if (color.equals("FFFFFF")) color = "111111";
-            Preferencias.setProfileColor(this, Color.parseColor("#" + color));
-        } catch (TwitterException e) {
-            e.printStackTrace();
-        }
-        if (urlfoto != "")
-            try {
-                if (!urlfoto.equals(Preferencias.getPhotoURL(this))) {
-                    Bitmap profilepic = new DownloadImageTask((ImageView) findViewById(R.id.iv_photoUser))
-                            .execute(urlfoto).get();
-                    Preferencias.setPhoto(this, encodeTobase64(profilepic));
-                    Preferencias.setPhotoURL(this, urlfoto);
-                }
-
-                if (!urlfondo.equals(Preferencias.getBannerURL(this))) {
-                    Bitmap profilebanner = new DownloadImageTask((ImageView) findViewById(R.id.imgBack))
-                            .execute(urlfondo).get();
-                    Preferencias.setBanner(this, encodeTobase64(profilebanner));
-                    Preferencias.setBannerURL(this, urlfondo);
-                }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
+            if (resultCode == TWITTER_LOGIN_RESULT_CODE_FAILURE) {
+                //Write your code if there's no result
             }
-/*        TextView txtuser = (TextView) findViewById(R.id.txtUser);
-        txtuser.setText(nombreuser);*/
-    }
-
-    /**
-     * Function to login twitter
-     */
-    private void loginToTwitter() {
-        // Check if already logged in
-        if (!isTwitterLoggedInAlready()) {
-            ConfigurationBuilder builder = new ConfigurationBuilder();
-            builder.setOAuthConsumerKey(TWITTER_CONSUMER_KEY);
-            builder.setOAuthConsumerSecret(TWITTER_CONSUMER_SECRET);
-            Configuration configuration = builder.build();
-
-            TwitterFactory factory = new TwitterFactory(configuration);
-            twitter = factory.getInstance();
-
-            try {
-                requestToken = twitter
-                        .getOAuthRequestToken(TWITTER_CALLBACK_URL);
-                this.startActivity(new Intent(Intent.ACTION_VIEW, Uri
-                        .parse(requestToken.getAuthenticationURL())));
-            } catch (TwitterException e) {
-                e.printStackTrace();
-            }
-
-        } else {
-            // user already logged into twitter
-            Toast.makeText(getApplicationContext(),
-                    "Already Logged into twitter", Toast.LENGTH_LONG).show();
         }
-    }
-
-    /**
-     * Function to logout from twitter It will just clear the application shared
-     * preferences
-     * */
-
-    /**
-     * Check user already logged in your application using twitter Login flag is
-     * fetched from Shared Preferences
-     */
-    private boolean isTwitterLoggedInAlready() {
-        // return twitter login status from Shared Preferences
-        return Preferencias.getLogged(this);
-    }
+    }//onActivityResult
 
     protected void onResume() {
         super.onResume();
@@ -351,58 +209,6 @@ public class Main extends Activity {
 
     }
 
-    public class LoginTask extends AsyncTask<Void, Void, RequestToken> {
-
-        private ProgressDialog progressDialog;
-
-        public LoginTask() {
-            progressDialog = ProgressDialog.show(Main.this, "", "Loading. Please wait...", false);
-        }
-
-        @Override
-        protected RequestToken doInBackground(Void... params) {
-            // TODO Auto-generated method stub
-            ConfigurationBuilder builder = new ConfigurationBuilder();
-            builder.setOAuthConsumerKey(TWITTER_CONSUMER_KEY);
-            builder.setOAuthConsumerSecret(TWITTER_CONSUMER_SECRET);
-            Configuration configuration = builder.build();
-
-            TwitterFactory factory = new TwitterFactory(configuration);
-            twitter = factory.getInstance();
-
-            try {
-                return requestToken = twitter
-                        .getOAuthRequestToken(TWITTER_CALLBACK_URL);
-            } catch (TwitterException e) {
-                e.printStackTrace();
-                return null;
-            }
-        }
-
-        @Override
-        protected void onPreExecute() {
-            // TODO Auto-generated method stub
-            Main.this.setProgressBarIndeterminateVisibility(true);
-        }
-
-        @Override
-        protected void onPostExecute(RequestToken result) {
-            // TODO Auto-generated method stub
-            Main.this.setProgressBarIndeterminateVisibility(false);
-            progressDialog.dismiss();
-            try {
-                requestToken = result;
-                Main.this.startActivity(new Intent(Intent.ACTION_VIEW, Uri
-                        .parse(requestToken.getAuthenticationURL())));
-            } catch (Exception e) {
-                e.printStackTrace();
-                alert.showAlertDialog(Main.this, "Internet Connection Timeout Error",
-                        "Please try later.", false);
-            }
-        }
-
-    }
-
     /**
      * Function to get timeline
      */
@@ -475,28 +281,5 @@ public class Main extends Activity {
 
     }
 
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
 
-        public DownloadImageTask(ImageView bmImage) {
-            this.bmImage = bmImage;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return mIcon11;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            //bmImage.setImageBitmap(result);
-        }
-    }
 }

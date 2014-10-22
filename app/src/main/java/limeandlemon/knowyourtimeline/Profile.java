@@ -12,8 +12,6 @@ import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 
@@ -53,9 +51,6 @@ public class Profile extends Activity {
         final Button btnjugar = (Button) findViewById(R.id.bntJugar);
         imgperfil.setImageBitmap(decodeBase64(Preferencias.getPhoto(this)));
         imgback.setImageBitmap(decodeBase64(Preferencias.getBanner(this)));
-
-        moveViewDown(imgperfil);
-        moveViewDown(imgback);
         btnjugar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -77,25 +72,18 @@ public class Profile extends Activity {
                 logoutFromTwitter();
             }
         });
-        int color = Preferencias.getProfileColor(this);
-        String fontPath = "fonts/Cicle Semi.ttf";
+        String fontPath = "fonts/gnuolane rg.ttf";
         Typeface tf = Typeface.createFromAsset(getAssets(), fontPath);
         btnjugar.setTypeface(tf);
-        btnjugar.setTextColor(color);
         btnclasificacion.setTypeface(tf);
-        btnclasificacion.setTextColor(color);
         btnopciones.setTypeface(tf);
-        btnopciones.setTextColor(color);
         btnsalir.setTypeface(tf);
-        btnsalir.setTextColor(color);
         btnsalir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    this.finalize();
-                } catch (Throwable throwable) {
-                    throwable.printStackTrace();
-                }
+
+                finish();
+                System.exit(0);
             }
         });
 
@@ -142,15 +130,4 @@ public class Profile extends Activity {
         view.setBackgroundColor(color);
     }
 
-    private void moveViewUp(final View view) {
-        Animation slide = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_up);
-
-        view.startAnimation(slide);
-
-    }
-
-    private void moveViewDown(final View view) {
-        Animation slide = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
-        view.startAnimation(slide);
-    }
 }

@@ -30,7 +30,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -88,7 +87,7 @@ public class Game extends Activity {
         scale = AnimationUtils.loadAnimation(this, R.anim.scale);
 
 
-        String fontPath = "fonts/Cicle Semi.ttf";
+        String fontPath = "fonts/gnuolane rg.ttf";
         tf = Typeface.createFromAsset(getAssets(), fontPath);
         if (Preferencias.getFirstHome(this) == 1) {
             String sql = "INSERT OR IGNORE INTO \"main\".\"Puntuacion\" (\"Aciertos\",\"Fallos\") VALUES (0,0);";
@@ -103,6 +102,7 @@ public class Game extends Activity {
         friends = new ArrayList<Long>();
         respuestas = new ArrayList<User>();
         pDialog = (ProgressBar) findViewById(R.id.progressBar);
+        answers = (RelativeLayout) findViewById(R.id.relativeLayout);
         pregunta = (RelativeLayout) findViewById(R.id.relativePregunta);
         answers = (RelativeLayout) findViewById(R.id.relativeLayout);
         layoutRespuestas = (LinearLayout) findViewById(R.id.linearRespuestas);
@@ -175,7 +175,7 @@ public class Game extends Activity {
             resp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
+                    moveViewDownOff(answers);
                     layoutRespuestas.removeAllViews();
                     if (((Button) view).getText().toString().equals(respuesta.getName())) {
                         aciertos = aciertos + 1;
@@ -253,34 +253,22 @@ public class Game extends Activity {
             if (i != 3)
                 addDividier();
         }
+        //moveViewUpOff(answers);
     }
 
     private void cambiarPuntuacion() {
-        TextView puntuacion = (TextView) findViewById(R.id.txtScore);
         TextView txtaciertos = (TextView) findViewById(R.id.txtAciertos);
         TextView txtfallos = (TextView) findViewById(R.id.txtFallos);
 
         txtaciertos.setText(aciertos + "");
         txtfallos.setText(fallos + "");
-        if (aciertos == 0 && fallos == 0)
-            puntuacion.setText(0 + "%");
-        else {
-            double porcentaje = (aciertos / (aciertos + fallos)) * 100;
-
-            DecimalFormat df = new DecimalFormat("#.00");
-            String punt = df.format(porcentaje);
-            puntuacion.setText(punt + "%");
-        }
-
-        puntuacion.startAnimation(scale);
     }
 
     private void mostrarOtraPregunta() throws TwitterException {
-
         respuestas.clear();
         layoutRespuestas.removeAllViews();
-
-        txtPregunta.setText(seleccionarPregunta() + "\n", true);
+        String textopregunta = seleccionarPregunta();
+        txtPregunta.setText(textopregunta + "\n", true);
         if (preguntaLength < 120)
             txtPregunta.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
         else txtPregunta.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
@@ -325,6 +313,15 @@ public class Game extends Activity {
         view.startAnimation(slide);
     }
 
+    private void moveViewDownOff(final View view) {
+        Animation slide = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down_offscreen);
+        view.startAnimation(slide);
+    }
+
+    private void moveViewUpOff(final View view) {
+        Animation slide = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_up_offscreen);
+        view.startAnimation(slide);
+    }
     private void moveViewDownSlow(final View view) {
         Animation slide = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down_slow);
         view.startAnimation(slide);
@@ -381,7 +378,8 @@ public class Game extends Activity {
         protected void onPostExecute(String file_url) {
             super.onPostExecute("");
             pDialog.setVisibility(View.GONE);
-            txtPregunta.setText(seleccionarPregunta() + "\n", true);
+            String textopregunta = seleccionarPregunta();
+            txtPregunta.setText(textopregunta + "\n", true);
             if (preguntaLength < 120)
                 txtPregunta.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
             else txtPregunta.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);

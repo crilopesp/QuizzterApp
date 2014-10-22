@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="limeandlemon.knowyourtimeline.Game"
-    android:background="@color/pager_background_alternate">
+    android:background="@color/color3">
 
 
     <RelativeLayout
@@ -14,26 +14,34 @@
         android:layout_below="@+id/frameLayout"
         android:id="@+id/relativePregunta">
 
-        <util.TextViewEx
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="New Text"
-            android:layout_gravity="fill"
-            android:id="@+id/txtPregunta"
-            android:textSize="25sp"
+            android:layout_height="match_parent"
+            android:id="@+id/scrollView"
             android:layout_below="@+id/linear234"
-            android:textColor="@color/blackly"
-            android:autoText="false"
             android:layout_marginRight="10dp"
             android:layout_marginLeft="10dp"
-            android:paddingBottom="10dp" />
+            android:fillViewport="false">
+
+            <util.TextViewEx
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="New Text"
+                android:id="@+id/txtPregunta"
+                android:textSize="25sp"
+                android:layout_marginBottom="10dp"
+                android:layout_below="@+id/linear234"
+                android:textColor="@color/blackly"
+                android:gravity="center"
+                android:autoText="false" />
+        </ScrollView>
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:background="#ff3ac9ff"
+            android:background="@color/colorTweet"
             android:id="@+id/linear234"
             android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"
@@ -53,35 +61,32 @@
                 android:textColor="@color/text"
                 android:textSize="15sp" />
         </LinearLayout>
-
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="140dp"
         android:id="@+id/frameLayout"
-        android:background="#ff0770f0"
+        android:background="@color/color2"
         android:layout_alignParentTop="true" >
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0"
-            android:id="@+id/txtScore"
-            android:layout_gravity="right"
-            android:textSize="30sp"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:textColor="@color/text" />
     </RelativeLayout>
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar"
+        android:layout_gravity="center"
+        android:layout_centerInParent="true" />
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:id="@+id/frameLayout2"
-        android:background="#ff00012e">
+        android:background="@color/color1">
 
-    <util.CircularImageView
+        <util.CircularImageView
             app:border="true"
             app:border_color="@color/text"
             app:border_width="2dp"
@@ -146,13 +151,6 @@
 
     </FrameLayout>
 
-    <ProgressBar
-        style="?android:attr/progressBarStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/progressBar"
-        android:layout_centerInParent="true" />
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -168,7 +166,7 @@
             android:layout_width="fill_parent"
             android:layout_height="32dp"
             android:gravity="center"
-            android:background="#ff3ac9ff"
+            android:background="@color/colorTweet"
             android:id="@+id/linearLayout2">
 
             <TextView
