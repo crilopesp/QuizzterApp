@@ -13,7 +13,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import util.Preferencias;
 
@@ -27,6 +29,7 @@ public class Profile extends Activity {
     private static SharedPreferences mSharedPreferences;
     ImageView imgperfil;
     ImageView imgback;
+    Button btnjugar, btnopciones, btnclasificacion, btnsalir;
 
     public static Bitmap decodeBase64(String input) {
         byte[] decodedByte = Base64.decode(input, 0);
@@ -44,13 +47,11 @@ public class Profile extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        final ImageView imgperfil = (ImageView) findViewById(R.id.iv_photoUser);
-        final ImageView imgback = (ImageView) findViewById(R.id.imgBack);
-        final Button btnjugar = (Button) findViewById(R.id.bntJugar);
+        imgperfil = (ImageView) findViewById(R.id.iv_photoUser);
+        imgback = (ImageView) findViewById(R.id.imgBack);
+        btnjugar = (Button) findViewById(R.id.bntJugar);
         imgperfil.setImageBitmap(decodeBase64(Preferencias.getPhoto(this)));
-        imgback.setImageBitmap(decodeBase64(Preferencias.getBanner(this)));
         btnjugar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -59,10 +60,18 @@ public class Profile extends Activity {
                 startActivity(intent);
             }
         });
-        Button btnclasificacion = (Button) findViewById(R.id.btnClasificacion);
-        Button btnopciones = (Button) findViewById(R.id.btnOpciones);
-        Button btnsalir = (Button) findViewById(R.id.btnSalir);
+        btnclasificacion = (Button) findViewById(R.id.btnClasificacion);
+        btnopciones = (Button) findViewById(R.id.btnOpciones);
+        btnopciones.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), Themes.class);
+                startActivity(intent);
+            }
+        });
+        btnsalir = (Button) findViewById(R.id.btnSalir);
 
+        cambiarColores();
         Button btnlogout = (Button) findViewById(R.id.btnLogout);
 
 
@@ -96,6 +105,25 @@ public class Profile extends Activity {
         return true;
     }
 
+    private void cambiarColores() {
+        FrameLayout frame1 = (FrameLayout) findViewById(R.id.frame1);
+        FrameLayout frame2 = (FrameLayout) findViewById(R.id.frame2);
+        FrameLayout frame3 = (FrameLayout) findViewById(R.id.frame3);
+        FrameLayout frame4 = (FrameLayout) findViewById(R.id.frame4);
+        TextView textName = (TextView) findViewById(R.id.txtName);
+        View view = this.getWindow().getDecorView();
+        view.setBackgroundColor(Preferencias.getColor3(this));
+        imgback.setBackgroundColor(Preferencias.getColor1(this));
+        frame1.setBackgroundColor(Preferencias.getColor4(this));
+        frame2.setBackgroundColor(Preferencias.getColor4(this));
+        frame3.setBackgroundColor(Preferencias.getColor4(this));
+        frame4.setBackgroundColor(Preferencias.getColor4(this));
+        textName.setBackgroundColor(Preferencias.getColor2(this));
+        btnjugar.setBackgroundColor(Preferencias.getColor5(this));
+        btnclasificacion.setBackgroundColor(Preferencias.getColor5(this));
+        btnopciones.setBackgroundColor(Preferencias.getColor5(this));
+        btnsalir.setBackgroundColor(Preferencias.getColor5(this));
+    }
     private void logoutFromTwitter() {
         // Clear the shared preferences
         Preferencias.setOauthSecret(this, "");

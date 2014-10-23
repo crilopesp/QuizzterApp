@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="limeandlemon.knowyourtimeline.Profile"
-    android:background="@color/color3">
+    android:background="@color/color3aqua">
 
     <LinearLayout
         android:orientation="vertical"
@@ -24,11 +24,12 @@
             <FrameLayout
                 android:layout_width="220dp"
                 android:layout_height="wrap_content"
-                android:background="@color/color1"
+                android:background="@color/color1aqua"
                 android:layout_marginBottom="5dp"
                 android:focusable="false"
                 android:paddingBottom="3dp"
-                android:layout_margin="5dp">
+                android:layout_margin="5dp"
+                android:id="@+id/frame1">
 
                 <Button
                     android:layout_width="match_parent"
@@ -44,11 +45,12 @@
             <FrameLayout
                 android:layout_width="220dp"
                 android:layout_height="wrap_content"
-                android:background="@color/color1"
+                android:background="@color/color1aqua"
                 android:layout_marginBottom="5dp"
                 android:focusable="false"
                 android:paddingBottom="3dp"
-                android:layout_margin="5dp">
+                android:layout_margin="5dp"
+                android:id="@+id/frame2">
 
                 <Button
                     android:layout_width="match_parent"
@@ -65,8 +67,8 @@
             <FrameLayout
                 android:layout_width="220dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/frameLayout"
-                android:background="@color/color1"
+                android:id="@+id/frame3"
+                android:background="@color/color1aqua"
                 android:layout_marginBottom="5dp"
                 android:focusable="false"
                 android:paddingBottom="3dp"
@@ -87,8 +89,8 @@
             <FrameLayout
                 android:layout_width="220dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/frameLayout2"
-                android:background="@color/color1"
+                android:id="@+id/frame4"
+                android:background="@color/color1aqua"
                 android:layout_marginBottom="5dp"
                 android:focusable="false"
                 android:paddingBottom="3dp"
@@ -117,18 +119,19 @@
         android:layout_alignParentEnd="true"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
-        android:background="@color/color1"
+        android:background="@color/color1aqua"
         android:layout_alignBottom="@+id/iv_photoUser" />
 
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/linearLayout"
-        android:background="@color/color2"
+        android:background="@color/color2aqua"
         android:textSize="40sp"
         android:textColor="@color/text"
         android:text="@string/app_name"
-        android:gravity="center"></TextView>
+        android:gravity="center"
+        android:id="@+id/txtName"></TextView>
 
     <util.CircularImageView
         app:border="true"

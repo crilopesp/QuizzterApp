@@ -47,5 +47,13 @@
     <string name="writen">has been writen by:</string>
     <string name="aciertos">Hits</string>
     <string name="fallos">Fails</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_themes">Themes</string>
+    <string name="aqua">Aquamarine</string>
+    <string name="cafe">Coffee</string>
+    <string name="miel">Honeycomb</string>
+    <string name="rosa">PinkDream</string>
+    <string name="elegance">Elegance</string>
+    <string name="aplicar">Apply</string>
 
 </resources>

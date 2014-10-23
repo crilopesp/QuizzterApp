@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -214,7 +213,7 @@ public class TwitterLoginActivity extends Activity {
             urlfoto = user.getOriginalProfileImageURL();
             String color = user.getProfileLinkColor();
             if (color.equals("FFFFFF")) color = "111111";
-            Preferencias.setProfileColor(this, Color.parseColor("#" + color));
+            //Preferencias.setProfileColor(this, Color.parseColor("#" + color));
         } catch (TwitterException e) {
             e.printStackTrace();
         }

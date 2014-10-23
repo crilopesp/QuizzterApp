@@ -1,0 +1,372 @@
+<RelativeLayout
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/relative">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/scrollView">
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@color/pager_background"
+            android:id="@+id/linearLayout5">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:background="@color/text"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_margin="10dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:text="@string/aqua"
+                    android:id="@+id/textView"
+                    android:gravity="center"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="5dp"
+                    android:textSize="20sp"
+                    android:background="@color/color1aqua"
+                    android:textColor="@color/text" />
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="fill_parent"
+                    android:layout_height="30dp">
+
+                    <FrameLayout
+                        android:layout_width="20dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:background="@color/color1aqua" />
+
+                    <FrameLayout
+                        android:layout_width="20dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:background="@color/color2aqua" />
+
+                    <FrameLayout
+                        android:layout_width="20dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:background="@color/color3aqua" />
+
+                    <FrameLayout
+                        android:layout_width="20dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:background="@color/colorLinkaqua" />
+
+                    <FrameLayout
+                        android:layout_width="20dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:background="@color/colorTweetaqua" />
+                </LinearLayout>
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:text="@string/aplicar"
+                    android:id="@+id/btnAqua"
+                    android:background="@drawable/selector_button_menu_aqua"
+                    android:layout_marginTop="5dp"
+                    android:textColor="@color/text" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/linearLayout"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:background="@color/text"
+                android:layout_marginBottom="10dp"
+                android:layout_margin="10dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:text="@string/cafe"
+                    android:id="@+id/textView2"
+                    android:gravity="center"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="20sp"
+                    android:textColor="@color/text"
+                    android:background="@color/color1cafe"
+                    android:layout_marginBottom="5dp" />
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="fill_parent"
+                    android:layout_height="30dp">
+
+                    <FrameLayout
+                        android:layout_width="20dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:background="@color/color1cafe" />
+
+                    <FrameLayout
+                        android:layout_width="20dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:background="@color/color2cafe" />
+
+                    <FrameLayout
+                        android:layout_width="20dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:background="@color/color3cafe" />
+
+                    <FrameLayout
+                        android:layout_width="20dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:background="@color/colorLinkcafe" />
+
+                    <FrameLayout
+                        android:layout_width="20dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:background="@color/colorTweetcafe" />
+                </LinearLayout>
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:text="@string/aplicar"
+                    android:id="@+id/btnCafe"
+                    android:background="@drawable/selector_button_menu_cafe"
+                    android:layout_marginTop="5dp"
+                    android:textColor="@color/text" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/linearWriten"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:background="@color/text"
+                android:layout_marginBottom="10dp"
+                android:layout_margin="10dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:text="@string/miel"
+                    android:id="@+id/textView3"
+                    android:gravity="center"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="5dp"
+                    android:textSize="20sp"
+                    android:textColor="@color/text"
+                    android:background="@color/color1miel" />
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="fill_parent"
+                    android:layout_height="30dp">
+
+                    <FrameLayout
+                        android:layout_width="20dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:background="@color/color1miel" />
+
+                    <FrameLayout
+                        android:layout_width="20dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:background="@color/color2miel" />
+
+                    <FrameLayout
+                        android:layout_width="20dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:background="@color/color3miel" />
+
+                    <FrameLayout
+                        android:layout_width="20dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:background="@color/colorLinkmiel" />
+
+                    <FrameLayout
+                        android:layout_width="20dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:background="@color/colorTweetmiel" />
+                </LinearLayout>
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:text="@string/aplicar"
+                    android:id="@+id/btnMiel"
+                    android:background="@drawable/selector_button_menu_miel"
+                    android:layout_marginTop="5dp"
+                    android:textColor="@color/text" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/linearLayout3"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:background="@color/text"
+                android:layout_marginBottom="10dp"
+                android:layout_margin="10dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:text="@string/rosa"
+                    android:id="@+id/textView4"
+                    android:gravity="center"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="5dp"
+                    android:textSize="20sp"
+                    android:textColor="@color/text"
+                    android:background="@color/color1rosa" />
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="fill_parent"
+                    android:layout_height="30dp">
+
+                    <FrameLayout
+                        android:layout_width="20dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:background="@color/color1rosa" />
+
+                    <FrameLayout
+                        android:layout_width="20dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:background="@color/color2rosa" />
+
+                    <FrameLayout
+                        android:layout_width="20dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:background="@color/color3rosa" />
+
+                    <FrameLayout
+                        android:layout_width="20dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:background="@color/colorLinkrosa" />
+
+                    <FrameLayout
+                        android:layout_width="20dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:background="@color/colorTweetrosa" />
+                </LinearLayout>
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:text="@string/aplicar"
+                    android:id="@+id/btnRosa"
+                    android:background="@drawable/selector_button_menu_rosa"
+                    android:layout_marginTop="5dp"
+                    android:textColor="@color/text" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/linearLayout4"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:background="@color/text"
+                android:layout_marginBottom="10dp"
+                android:layout_margin="10dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:text="@string/elegance"
+                    android:id="@+id/textView5"
+                    android:gravity="center"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="10dp"
+                    android:textSize="20sp"
+                    android:textColor="@color/text"
+                    android:background="@color/color1elegance" />
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="fill_parent"
+                    android:layout_height="30dp">
+
+                    <FrameLayout
+                        android:layout_width="20dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:background="@color/color1elegance" />
+
+                    <FrameLayout
+                        android:layout_width="20dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:background="@color/color2elegance" />
+
+                    <FrameLayout
+                        android:layout_width="20dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:background="@color/color3elegance" />
+
+                    <FrameLayout
+                        android:layout_width="20dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:background="@color/colorLinkelegance" />
+
+                    <FrameLayout
+                        android:layout_width="20dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:background="@color/colorTweetelegance" />
+                </LinearLayout>
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:text="@string/aplicar"
+                    android:id="@+id/btnElegance"
+                    android:background="@drawable/selector_button_menu_elegance"
+                    android:layout_marginTop="5dp"
+                    android:textColor="@color/text" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

@@ -7,12 +7,47 @@
     <color name="yellowly">#b5d85200</color>
     <color name="grey">#ff636363</color>
 
-    <color name="color1">#063940</color>
-    <color name="color2">#195E63</color>
-    <color name="color3">#ECE1C3</color>
-    <color name="colorLink">#DAD6CA</color>
-    <color name="colorTweet">#3E838C</color>
+    <!-- Aquamarina -->
+    <color name="color1aqua">#063940</color>
+    <color name="color2aqua">#195E63</color>
+    <color name="color3aqua">#ECE1C3</color>
+    <color name="colorLinkaqua">#ff223d45</color>
+    <color name="colorTweetaqua">#3E838C</color>
 
+    <!-- Café -->
+    <color name="color1cafe">#674941</color>
+    <color name="color2cafe">#BEA586</color>
+    <color name="color3cafe">#FCFBE3</color>
+    <color name="colorLinkcafe">#ff54312a</color>
+    <color name="colorTweetcafe">#8E5B3E</color>
+
+    <!-- Miel -->
+    <color name="color1miel">#E3AD40</color>
+    <color name="color2miel">#FCD036</color>
+    <color name="color3miel">#FDF1CC</color>
+    <color name="colorLinkmiel">#ff554437</color>
+    <color name="colorTweetmiel">#987F69</color>
+
+    <!-- Rosa -->
+    <color name="color1rosa">#770021</color>
+    <color name="color2rosa">#BE0049</color>
+    <color name="color3rosa">#EEEEEE</color>
+    <color name="colorLinkrosa">#ffaa5f84</color>
+    <color name="colorTweetrosa">#FF97CA</color>
+
+    <!-- elegance -->
+    <color name="color1elegance">#2E2633</color>
+    <color name="color2elegance">#555152</color>
+    <color name="color3elegance">#FCFBE3</color>
+    <color name="colorLinkelegance">#ff6a1432</color>
+    <color name="colorTweetelegance">#99173C</color>
+
+    <!-- notevengirly -->
+    <color name="color1notevengirly">#0E0B29</color>
+    <color name="color2notevengirly">#3B0032</color>
+    <color name="color3notevengirly">#EBEAA9</color>
+    <color name="colorLinknotevengirly">#ff461923</color>
+    <color name="colorTweetnotevengirly">#7D2948</color>
 
     <!-- colores bootstrap -->
     <color name="text">#FCFCFC</color>

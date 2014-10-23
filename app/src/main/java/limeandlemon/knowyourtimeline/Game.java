@@ -82,6 +82,7 @@ public class Game extends Activity {
         setContentView(R.layout.activity_game);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         db = new InternalDBHandler(this).getWritableDatabase();
+        cambiarColores();
         left_to_right_animation = AnimationUtils.loadAnimation(this, R.anim.left_to_right);
         right_to_left_animation = AnimationUtils.loadAnimation(this, R.anim.right_to_left);
         scale = AnimationUtils.loadAnimation(this, R.anim.scale);
@@ -113,7 +114,7 @@ public class Game extends Activity {
         txtPregunta.setMovementMethod(new ScrollingMovementMethod());
         txtPregunta.setTypeface(tf);
         imgperfil.setImageBitmap(decodeBase64(Preferencias.getPhoto(this)));
-        RelativeLayout frame1 = (RelativeLayout) findViewById(R.id.frameLayout);
+        RelativeLayout frame1 = (RelativeLayout) findViewById(R.id.frame3);
         FrameLayout frame2 = (FrameLayout) findViewById(R.id.frameLayout2);
         moveViewDown(frame1);
         moveViewDownSlow(frame2);
@@ -122,6 +123,19 @@ public class Game extends Activity {
         cambiarPuntuacion();
         pregunta.setVisibility(View.GONE);
         new getTimeLine().execute();
+    }
+
+    private void cambiarColores() {
+        LinearLayout tweet = (LinearLayout) findViewById(R.id.linearTweet);
+        LinearLayout writen = (LinearLayout) findViewById(R.id.linearWriten);
+        RelativeLayout frame1 = (RelativeLayout) findViewById(R.id.frame3);
+        FrameLayout frame2 = (FrameLayout) findViewById(R.id.frameLayout2);
+        View view = this.getWindow().getDecorView();
+        view.setBackgroundColor(Preferencias.getColor3(this));
+        frame1.setBackgroundColor(Preferencias.getColor1(this));
+        frame2.setBackgroundColor(Preferencias.getColor2(this));
+        tweet.setBackgroundColor(Preferencias.getColor5(this));
+        writen.setBackgroundColor(Preferencias.getColor5(this));
     }
 
     private String seleccionarPregunta() {
@@ -322,6 +336,7 @@ public class Game extends Activity {
         Animation slide = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_up_offscreen);
         view.startAnimation(slide);
     }
+
     private void moveViewDownSlow(final View view) {
         Animation slide = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down_slow);
         view.startAnimation(slide);
@@ -485,4 +500,5 @@ public class Game extends Activity {
         }
         return commentstr;
     }
+
 }

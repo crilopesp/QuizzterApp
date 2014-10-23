@@ -12,4 +12,9 @@
     <string name="writen">ha sido escrito por:</string>
     <string name="aciertos">Hits</string>
     <string name="fallos">Fails</string>
+    <string name="aqua">Aquamarine</string>
+    <string name="miel">Honeycomb</string>
+    <string name="rosa">PinkDream</string>
+    <string name="elegance">Elegance</string>
+    <string name="aplicar">Apply</string>
 </resources>

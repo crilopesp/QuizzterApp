@@ -4,21 +4,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="limeandlemon.knowyourtimeline.Game"
-    android:background="@color/color3">
+    android:background="@color/color3aqua">
 
 
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_above="@+id/relativeLayout"
-        android:layout_below="@+id/frameLayout"
+        android:layout_below="@+id/frame3"
         android:id="@+id/relativePregunta">
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/scrollView"
-            android:layout_below="@+id/linear234"
+            android:layout_below="@+id/linearTweet"
             android:layout_marginRight="10dp"
             android:layout_marginLeft="10dp"
             android:fillViewport="false">
@@ -30,7 +30,7 @@
                 android:id="@+id/txtPregunta"
                 android:textSize="25sp"
                 android:layout_marginBottom="10dp"
-                android:layout_below="@+id/linear234"
+                android:layout_below="@+id/linearTweet"
                 android:textColor="@color/blackly"
                 android:gravity="center"
                 android:autoText="false" />
@@ -41,8 +41,8 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:background="@color/colorTweet"
-            android:id="@+id/linear234"
+            android:background="@color/colorTweetaqua"
+            android:id="@+id/linearTweet"
             android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginLeft="10dp">
@@ -66,9 +66,9 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="140dp"
-        android:id="@+id/frameLayout"
-        android:background="@color/color2"
-        android:layout_alignParentTop="true" >
+        android:id="@+id/frame3"
+        android:background="@color/color2aqua"
+        android:layout_alignParentTop="true">
 
     </RelativeLayout>
 
@@ -84,7 +84,7 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:id="@+id/frameLayout2"
-        android:background="@color/color1">
+        android:background="@color/color1aqua">
 
         <util.CircularImageView
             app:border="true"
@@ -166,8 +166,8 @@
             android:layout_width="fill_parent"
             android:layout_height="32dp"
             android:gravity="center"
-            android:background="@color/colorTweet"
-            android:id="@+id/linearLayout2">
+            android:background="@color/colorTweetaqua"
+            android:id="@+id/linearWriten">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -185,7 +185,7 @@
             android:id="@+id/linearRespuestas"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_below="@+id/linearLayout2"
+            android:layout_below="@+id/linearWriten"
             android:animateLayoutChanges="true"
             android:layout_marginBottom="5dp"
             android:layout_marginTop="5dp"></LinearLayout>

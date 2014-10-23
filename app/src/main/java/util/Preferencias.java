@@ -4,8 +4,9 @@ package util;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.util.Log;
+
+import limeandlemon.knowyourtimeline.R;
 
 public class Preferencias {
     private static final String APP_FILE = "APP_PREFERENCES";
@@ -18,11 +19,15 @@ public class Preferencias {
     static final String PREF_KEY_TWITTER_BANNER = "user_profile_banner";
     static final String PREF_KEY_TWITTER_URLBANNER = "user_profile_banner_url";
     static final String PREF_KEY_TWITTER_COLOR = "user_profile_color";
+    static final String COLOR1 = "user_profile_color1";
+    static final String COLOR2 = "user_profile_color2";
+    static final String COLOR3 = "user_profile_color3";
+    static final String COLOR4 = "user_profile_color4";
+    static final String COLOR5 = "user_profile_color5";
     private static final String APP_FIRST_HOME = "FIRST_HOME";
 
     //OAUTHTOKEN
-    public static void setOauthToken(Context context, String token)
-    {
+    public static void setOauthToken(Context context, String token) {
         try {
             SharedPreferences.Editor editor = context.getSharedPreferences(USER_FILE, Activity.MODE_PRIVATE).edit();
             editor.putString(PREF_KEY_OAUTH_TOKEN, token);
@@ -40,6 +45,7 @@ public class Preferencias {
         }
         return null;
     }
+
     //OAUTHSECRET
     public static void setOauthSecret(Context context, String token) {
         try {
@@ -50,6 +56,7 @@ public class Preferencias {
             Log.d(Preferencias.class.getSimpleName(), "Exception", e);
         }
     }
+
     public static String getOauthSecret(Context context) {
         try {
             return context.getSharedPreferences(USER_FILE, Activity.MODE_PRIVATE).getString(PREF_KEY_OAUTH_SECRET, "");
@@ -58,6 +65,7 @@ public class Preferencias {
         }
         return null;
     }
+
     //LOGIN
     public static void setLogged(Context context, boolean bool) {
         try {
@@ -77,6 +85,7 @@ public class Preferencias {
         }
         return false;
     }
+
     //PHOTO
     public static void setPhoto(Context context, String token) {
         try {
@@ -96,6 +105,7 @@ public class Preferencias {
         }
         return null;
     }
+
     //BANNER
     public static void setBanner(Context context, String token) {
         try {
@@ -115,6 +125,7 @@ public class Preferencias {
         }
         return null;
     }
+
     //PHOTO
     public static void setPhotoURL(Context context, String token) {
         try {
@@ -134,6 +145,7 @@ public class Preferencias {
         }
         return null;
     }
+
     //BANNER
     public static void setBannerURL(Context context, String token) {
         try {
@@ -154,23 +166,6 @@ public class Preferencias {
         return null;
     }
 
-    public static void setProfileColor(Context context, int i) {
-        try {
-        SharedPreferences.Editor editor = context.getSharedPreferences(USER_FILE, Activity.MODE_PRIVATE).edit();
-        editor.putInt(PREF_KEY_TWITTER_COLOR, i);
-        editor.commit();
-    } catch (Exception e) {
-        Log.d(Preferencias.class.getSimpleName(), "Exception", e);
-    }
-    }
-    public static int getProfileColor(Context context) {
-        try {
-            return context.getSharedPreferences(USER_FILE, Activity.MODE_PRIVATE).getInt(PREF_KEY_TWITTER_COLOR, -1);
-        } catch (Exception e) {
-            Log.d(Preferencias.class.getSimpleName(), "Exception", e);
-        }
-        return -1;
-    }
     public static void setFirstHome(Context context, int id) {
         try {
             SharedPreferences.Editor editor = context.getSharedPreferences(APP_FILE, Activity.MODE_PRIVATE).edit();
@@ -184,6 +179,101 @@ public class Preferencias {
     public static int getFirstHome(Context context) {
         try {
             return context.getSharedPreferences(APP_FILE, Activity.MODE_PRIVATE).getInt(APP_FIRST_HOME, 1);
+        } catch (Exception e) {
+            Log.d(Preferencias.class.getSimpleName(), "Exception", e);
+        }
+        return -1;
+    }
+
+    public static void setColor1(Context context, int color) {
+        try {
+            SharedPreferences.Editor editor = context.getSharedPreferences(APP_FILE, Activity.MODE_PRIVATE).edit();
+            editor.putInt(COLOR1, color);
+            editor.commit();
+        } catch (Exception e) {
+            Log.d(Preferencias.class.getSimpleName(), "Exception", e);
+        }
+    }
+
+    public static int getColor1(Context context) {
+        try {
+            return context.getSharedPreferences(APP_FILE, Activity.MODE_PRIVATE).getInt(COLOR1, R.color.color1aqua);
+        } catch (Exception e) {
+            Log.d(Preferencias.class.getSimpleName(), "Exception", e);
+        }
+        return -1;
+    }
+
+    public static void setColor2(Context context, int colorpalette) {
+        try {
+            SharedPreferences.Editor editor = context.getSharedPreferences(APP_FILE, Activity.MODE_PRIVATE).edit();
+            editor.putInt(COLOR2, colorpalette);
+            editor.commit();
+        } catch (Exception e) {
+            Log.d(Preferencias.class.getSimpleName(), "Exception", e);
+        }
+    }
+
+    public static int getColor2(Context context) {
+        try {
+            return context.getSharedPreferences(APP_FILE, Activity.MODE_PRIVATE).getInt(COLOR2, R.color.color2aqua);
+        } catch (Exception e) {
+            Log.d(Preferencias.class.getSimpleName(), "Exception", e);
+        }
+        return -1;
+    }
+
+    public static void setColor3(Context context, int colorpalette) {
+        try {
+            SharedPreferences.Editor editor = context.getSharedPreferences(APP_FILE, Activity.MODE_PRIVATE).edit();
+            editor.putInt(COLOR3, colorpalette);
+            editor.commit();
+        } catch (Exception e) {
+            Log.d(Preferencias.class.getSimpleName(), "Exception", e);
+        }
+    }
+
+    public static int getColor3(Context context) {
+        try {
+            return context.getSharedPreferences(APP_FILE, Activity.MODE_PRIVATE).getInt(COLOR3, R.color.color3aqua);
+        } catch (Exception e) {
+            Log.d(Preferencias.class.getSimpleName(), "Exception", e);
+        }
+        return -1;
+    }
+
+    public static void setColor4(Context context, int colorpalette) {
+        try {
+            SharedPreferences.Editor editor = context.getSharedPreferences(APP_FILE, Activity.MODE_PRIVATE).edit();
+            editor.putInt(COLOR4, colorpalette);
+            editor.commit();
+        } catch (Exception e) {
+            Log.d(Preferencias.class.getSimpleName(), "Exception", e);
+        }
+    }
+
+    public static int getColor4(Context context) {
+        try {
+            return context.getSharedPreferences(APP_FILE, Activity.MODE_PRIVATE).getInt(COLOR4, R.color.colorLinkaqua);
+        } catch (Exception e) {
+            Log.d(Preferencias.class.getSimpleName(), "Exception", e);
+        }
+        return -1;
+    }
+
+    public static void setColor5(Context context, int colorpalette) {
+        try {
+            SharedPreferences.Editor editor = context.getSharedPreferences(APP_FILE, Activity.MODE_PRIVATE).edit();
+            editor.putInt(COLOR5, colorpalette);
+            editor.commit();
+        } catch (Exception e) {
+            Log.d(Preferencias.class.getSimpleName(), "Exception", e);
+        }
+    }
+
+    public static int getColor5(Context context) {
+        try {
+            return context.getSharedPreferences(APP_FILE, Activity.MODE_PRIVATE).getInt(COLOR5, R.color.colorTweetaqua);
         } catch (Exception e) {
             Log.d(Preferencias.class.getSimpleName(), "Exception", e);
         }

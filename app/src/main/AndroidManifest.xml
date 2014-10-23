@@ -42,8 +42,8 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:scheme="x-oauthflow-twitter"
-                    android:host="twitterlogin" />
+                    android:host="twitterlogin"
+                    android:scheme="x-oauthflow-twitter" />
             </intent-filter>
         </activity>
         <activity
@@ -55,8 +55,17 @@
         <activity
             android:name=".Game"
             android:label="@string/title_activity_game"
-            android:theme="@android:style/Theme.NoTitleBar">>
+            android:theme="@android:style/Theme.NoTitleBar">
+            >
         </activity>
+        <activity
+            android:name=".Settings"
+            android:label="@string/title_activity_settings"
+            android:theme="@android:style/Theme.NoTitleBar"></activity>
+        <activity
+            android:name=".Themes"
+            android:label="@string/title_activity_themes"
+            android:theme="@android:style/Theme.NoTitleBar"></activity>
     </application>
 
 </manifest>
