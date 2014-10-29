@@ -5,8 +5,10 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
 
 import util.Preferencias;
 
@@ -17,11 +19,17 @@ public class Themes extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_themes);
-        Button btnaqua = (Button) findViewById(R.id.btnAqua);
-        Button btncafe = (Button) findViewById(R.id.btnCafe);
-        Button btnmiel = (Button) findViewById(R.id.btnMiel);
-        Button btnrosa = (Button) findViewById(R.id.btnRosa);
-        Button btnelegance = (Button) findViewById(R.id.btnElegance);
+
+        TextView textName = (TextView) findViewById(R.id.txtName);
+        ScrollView scroll = (ScrollView) findViewById(R.id.scrollView);
+        scroll.setBackgroundColor(Preferencias.getColor3(this));
+        View view = this.getWindow().getDecorView();
+        view.setBackgroundColor(Preferencias.getColor3(this));
+        LinearLayout btnaqua = (LinearLayout) findViewById(R.id.lytAqua);
+        LinearLayout btncafe = (LinearLayout) findViewById(R.id.lytCafe);
+        LinearLayout btnmiel = (LinearLayout) findViewById(R.id.lytMiel);
+        LinearLayout btnrosa = (LinearLayout) findViewById(R.id.lytRosa);
+        LinearLayout btnelegance = (LinearLayout) findViewById(R.id.lytElegance);
         RelativeLayout relative = (RelativeLayout) findViewById(R.id.relative);
         relative.setBackgroundColor(Preferencias.getColor3(this));
 

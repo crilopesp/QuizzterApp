@@ -40,6 +40,7 @@ import java.util.regex.Pattern;
 
 import twitter4j.IDs;
 import twitter4j.Paging;
+import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
@@ -57,6 +58,7 @@ public class Game extends Activity {
     static String TWITTER_CONSUMER_SECRET = "uxCIVsaPSsvckIBpSfZCLYGli0jHus4xMkE5sgk";
     RelativeLayout pregunta, answers;
     LinearLayout layoutRespuestas;
+    LinearLayout layoutRetFav;
     List<twitter4j.Status> statuses;
     List<Long> friends;
     User respuesta;
@@ -69,6 +71,10 @@ public class Game extends Activity {
     Animation left_to_right_animation, right_to_left_animation, scale;
     Twitter twitter;
     ProgressBar pDialog;
+    ImageView fav, retweet;
+    Status tweetactual;
+    private boolean retweeted = false;
+    private boolean favorited = false;
 
     public static Bitmap decodeBase64(String input) {
         byte[] decodedByte = Base64.decode(input, 0);
@@ -82,6 +88,9 @@ public class Game extends Activity {
         setContentView(R.layout.activity_game);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         db = new InternalDBHandler(this).getWritableDatabase();
+
+        layoutRetFav = (LinearLayout) findViewById(R.id.lytRetFav);
+        layoutRetFav.setBackgroundColor(Preferencias.getColor5(this));
         cambiarColores();
         left_to_right_animation = AnimationUtils.loadAnimation(this, R.anim.left_to_right);
         right_to_left_animation = AnimationUtils.loadAnimation(this, R.anim.right_to_left);
@@ -100,6 +109,53 @@ public class Game extends Activity {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
         }
+        fav = (ImageView) findViewById(R.id.imgFav);
+        fav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (favorited) {
+                    favorited = false;
+                    fav.setImageResource(R.drawable.ic_action_action_grade);
+                    try {
+                        desmarcarTweetFav(tweetactual.getId());
+                    } catch (TwitterException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    favorited = true;
+                    fav.setImageResource(R.drawable.ic_action_action_graded);
+                    try {
+                        marcarTweetFav(tweetactual.getId());
+                    } catch (TwitterException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+        retweet = (ImageView) findViewById(R.id.imgRetweet);
+        retweet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (retweeted) {
+                    retweeted = false;
+                    try {
+                        desretweetear(tweetactual.getId());
+                    } catch (TwitterException e) {
+                        e.printStackTrace();
+                    }
+                    retweet.setImageResource(R.drawable.ic_action_av_repeat);
+                } else {
+                    retweeted = true;
+                    try {
+                        retweetear(tweetactual.getId());
+                    } catch (TwitterException e) {
+                        e.printStackTrace();
+                    }
+
+                    retweet.setImageResource(R.drawable.ic_action_av_repeated);
+                }
+            }
+        });
         friends = new ArrayList<Long>();
         respuestas = new ArrayList<User>();
         pDialog = (ProgressBar) findViewById(R.id.progressBar);
@@ -127,7 +183,7 @@ public class Game extends Activity {
 
     private void cambiarColores() {
         LinearLayout tweet = (LinearLayout) findViewById(R.id.linearTweet);
-        LinearLayout writen = (LinearLayout) findViewById(R.id.linearWriten);
+        LinearLayout writen = (LinearLayout) findViewById(R.id.lytMiel);
         RelativeLayout frame1 = (RelativeLayout) findViewById(R.id.frame3);
         FrameLayout frame2 = (FrameLayout) findViewById(R.id.frameLayout2);
         View view = this.getWindow().getDecorView();
@@ -142,10 +198,13 @@ public class Game extends Activity {
         while (!statuses.isEmpty()) {
             Random randomizer = new Random();
             int num = randomizer.nextInt(statuses.size());
+            statuses.get(num).isRetweetedByMe();
+            statuses.get(num).isFavorited();
             respuesta = statuses.get(num).getUser();
             if (comprobarRespondido(statuses.get(num).getId())) statuses.remove(num);
             else {
                 respuestas.add(respuesta);
+                tweetactual = statuses.get(num);
                 registrarPregunta(statuses.get(num).getId());
                 preguntaLength = statuses.get(num).getText().length();
                 return removeUrl(statuses.get(num).getText());
@@ -286,6 +345,8 @@ public class Game extends Activity {
         if (preguntaLength < 120)
             txtPregunta.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
         else txtPregunta.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
+        fav.setImageResource(R.drawable.ic_action_action_grade);
+        retweet.setImageResource(R.drawable.ic_action_av_repeat);
         seleccionarRespuestaAzar();
     }
 
@@ -500,5 +561,40 @@ public class Game extends Activity {
         }
         return commentstr;
     }
+
+    private void marcarTweetFav(long id) throws TwitterException {
+        TwitterFactory factory = new TwitterFactory();
+        Twitter twitter = factory.getInstance();
+        twitter.setOAuthConsumer(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET);
+        AccessToken accessToken = new AccessToken(Preferencias.getOauthToken(this), Preferencias.getOauthSecret(this));
+        twitter.setOAuthAccessToken(accessToken);
+        Status status = twitter.createFavorite(id);
+    }
+
+    private void desmarcarTweetFav(long id) throws TwitterException {
+        TwitterFactory factory = new TwitterFactory();
+        Twitter twitter = factory.getInstance();
+        twitter.setOAuthConsumer(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET);
+        AccessToken accessToken = new AccessToken(Preferencias.getOauthToken(this), Preferencias.getOauthSecret(this));
+        twitter.setOAuthAccessToken(accessToken);
+        Status status = twitter.destroyFavorite(id);
+    }
+
+    private void retweetear(long id) throws TwitterException {
+        Twitter twitter = new TwitterFactory().getInstance();
+        twitter.setOAuthConsumer(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET);
+        AccessToken accessToken = new AccessToken(Preferencias.getOauthToken(this), Preferencias.getOauthSecret(this));
+        twitter.setOAuthAccessToken(accessToken);
+        twitter.retweetStatus(id);
+    }
+
+    private void desretweetear(long id) throws TwitterException {
+        Twitter twitter = new TwitterFactory().getInstance();
+        twitter.setOAuthConsumer(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET);
+        AccessToken accessToken = new AccessToken(Preferencias.getOauthToken(this), Preferencias.getOauthSecret(this));
+        twitter.setOAuthAccessToken(accessToken);
+        Status status = twitter.destroyStatus(id);
+    }
+
 
 }

@@ -13,8 +13,7 @@
             android:orientation="vertical"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:background="@color/pager_background"
-            android:id="@+id/linearLayout5">
+            android:id="@+id/colores">
 
             <LinearLayout
                 android:orientation="vertical"
@@ -26,11 +25,12 @@
                 android:background="@color/text"
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
-                android:layout_margin="10dp">
+                android:layout_margin="10dp"
+                android:id="@+id/lytAqua">
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
+                    android:layout_height="50dp"
                     android:text="@string/aqua"
                     android:id="@+id/textView"
                     android:gravity="center"
@@ -76,21 +76,13 @@
                         android:background="@color/colorTweetaqua" />
                 </LinearLayout>
 
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:text="@string/aplicar"
-                    android:id="@+id/btnAqua"
-                    android:background="@drawable/selector_button_menu_aqua"
-                    android:layout_marginTop="5dp"
-                    android:textColor="@color/text" />
             </LinearLayout>
 
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/linearLayout"
+                android:id="@+id/lytCafe"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
@@ -100,7 +92,7 @@
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
+                    android:layout_height="50dp"
                     android:text="@string/cafe"
                     android:id="@+id/textView2"
                     android:gravity="center"
@@ -146,21 +138,13 @@
                         android:background="@color/colorTweetcafe" />
                 </LinearLayout>
 
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:text="@string/aplicar"
-                    android:id="@+id/btnCafe"
-                    android:background="@drawable/selector_button_menu_cafe"
-                    android:layout_marginTop="5dp"
-                    android:textColor="@color/text" />
             </LinearLayout>
 
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/linearWriten"
+                android:id="@+id/lytMiel"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
@@ -170,7 +154,7 @@
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
+                    android:layout_height="50dp"
                     android:text="@string/miel"
                     android:id="@+id/textView3"
                     android:gravity="center"
@@ -216,21 +200,13 @@
                         android:background="@color/colorTweetmiel" />
                 </LinearLayout>
 
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:text="@string/aplicar"
-                    android:id="@+id/btnMiel"
-                    android:background="@drawable/selector_button_menu_miel"
-                    android:layout_marginTop="5dp"
-                    android:textColor="@color/text" />
             </LinearLayout>
 
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/linearLayout3"
+                android:id="@+id/lytRosa"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
@@ -240,7 +216,7 @@
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
+                    android:layout_height="50dp"
                     android:text="@string/rosa"
                     android:id="@+id/textView4"
                     android:gravity="center"
@@ -286,21 +262,13 @@
                         android:background="@color/colorTweetrosa" />
                 </LinearLayout>
 
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:text="@string/aplicar"
-                    android:id="@+id/btnRosa"
-                    android:background="@drawable/selector_button_menu_rosa"
-                    android:layout_marginTop="5dp"
-                    android:textColor="@color/text" />
             </LinearLayout>
 
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/linearLayout4"
+                android:id="@+id/lytElegance"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
@@ -310,12 +278,12 @@
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
+                    android:layout_height="50dp"
                     android:text="@string/elegance"
                     android:id="@+id/textView5"
                     android:gravity="center"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginBottom="5dp"
                     android:textSize="20sp"
                     android:textColor="@color/text"
                     android:background="@color/color1elegance" />
@@ -356,14 +324,6 @@
                         android:background="@color/colorTweetelegance" />
                 </LinearLayout>
 
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:text="@string/aplicar"
-                    android:id="@+id/btnElegance"
-                    android:background="@drawable/selector_button_menu_elegance"
-                    android:layout_marginTop="5dp"
-                    android:textColor="@color/text" />
             </LinearLayout>
 
         </LinearLayout>

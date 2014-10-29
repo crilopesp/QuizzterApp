@@ -16,14 +16,15 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:id="@+id/scrollView"
-            android:layout_below="@+id/linearTweet"
             android:layout_marginRight="10dp"
             android:layout_marginLeft="10dp"
-            android:fillViewport="false">
+            android:fillViewport="false"
+            android:layout_below="@+id/linearTweet"
+            android:layout_above="@+id/lytRetFav">
 
-            <util.TextViewEx
+        <util.TextViewEx
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="New Text"
@@ -60,6 +61,52 @@
                 android:id="@+id/textView3"
                 android:textColor="@color/text"
                 android:textSize="15sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:background="@color/colorTweetaqua"
+            android:id="@+id/lytRetFav"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_alignParentBottom="true">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/imgRetweet"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_action_av_repeat" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:id="@+id/imageView"
+                android:src="@drawable/divisor_vertical" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/imgFav"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_action_action_grade" />
+            </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
 
@@ -167,9 +214,9 @@
             android:layout_height="32dp"
             android:gravity="center"
             android:background="@color/colorTweetaqua"
-            android:id="@+id/linearWriten">
+            android:id="@+id/lytMiel">
 
-            <TextView
+        <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/writen"
@@ -185,7 +232,7 @@
             android:id="@+id/linearRespuestas"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_below="@+id/linearWriten"
+            android:layout_below="@+id/lytMiel"
             android:animateLayoutChanges="true"
             android:layout_marginBottom="5dp"
             android:layout_marginTop="5dp"></LinearLayout>

@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/imgBack"
-        android:id="@+id/linearLayout">
+        android:id="@+id/lytCafe">
 
         <LinearLayout
             android:orientation="vertical"
@@ -125,7 +125,7 @@
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/linearLayout"
+        android:layout_alignTop="@+id/lytCafe"
         android:background="@color/color2aqua"
         android:textSize="40sp"
         android:textColor="@color/text"

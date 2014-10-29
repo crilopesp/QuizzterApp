@@ -10,11 +10,11 @@
     <string name="score">Puntuación</string>
     <string name="thistweet">Este tweet ...</string>
     <string name="writen">ha sido escrito por:</string>
-    <string name="aciertos">Hits</string>
-    <string name="fallos">Fails</string>
-    <string name="aqua">Aquamarine</string>
-    <string name="miel">Honeycomb</string>
-    <string name="rosa">PinkDream</string>
-    <string name="elegance">Elegance</string>
-    <string name="aplicar">Apply</string>
+    <string name="aciertos">Aciertos</string>
+    <string name="fallos">Fallos</string>
+    <string name="aqua">Aquamarina</string>
+    <string name="miel">Miel</string>
+    <string name="rosa">Romántico</string>
+    <string name="elegance">Elegancia</string>
+    <string name="aplicar">Aplicar</string>
 </resources>
