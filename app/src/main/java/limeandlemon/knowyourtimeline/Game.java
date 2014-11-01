@@ -38,6 +38,7 @@ import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import logica.Usuario;
 import twitter4j.IDs;
 import twitter4j.Paging;
 import twitter4j.Status;
@@ -46,10 +47,11 @@ import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import twitter4j.User;
 import twitter4j.auth.AccessToken;
-import twitter4j.conf.ConfigurationBuilder;
 import util.InternalDBHandler;
 import util.Preferencias;
 import util.TextViewEx;
+import util.TwitterUtil;
+import util.servidor.Controlador;
 
 
 public class Game extends Activity {
@@ -66,6 +68,7 @@ public class Game extends Activity {
     int preguntaLength;
     ArrayList<User> respuestas;
     int aciertos, fallos;
+    TextView txtpuntuacion;
     TextViewEx txtPregunta;
     Typeface tf;
     Animation left_to_right_animation, right_to_left_animation, scale;
@@ -73,6 +76,8 @@ public class Game extends Activity {
     ProgressBar pDialog;
     ImageView fav, retweet;
     Status tweetactual;
+    double puntuacion;
+    Controlador control;
     private boolean retweeted = false;
     private boolean favorited = false;
 
@@ -86,9 +91,23 @@ public class Game extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+        twitter = TwitterUtil.getTwitter(this);
+        txtpuntuacion = (TextView) findViewById(R.id.txtPuntuacion);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         db = new InternalDBHandler(this).getWritableDatabase();
+        control = new Controlador();
+        try {
+            Usuario user = control.getUsuario(twitter.getId());
+            Log.e("usuario", user.toString());
+            puntuacion = user.getPuntuacion();
+            Log.e("punt", user.getPuntuacion() + "");
+            txtpuntuacion.setText(puntuacion + "");
 
+            aciertos = user.getAciertos();
+            fallos = user.getFallos();
+        } catch (TwitterException e) {
+            e.printStackTrace();
+        }
         layoutRetFav = (LinearLayout) findViewById(R.id.lytRetFav);
         layoutRetFav.setBackgroundColor(Preferencias.getColor5(this));
         cambiarColores();
@@ -254,6 +273,7 @@ public class Game extends Activity {
                         aciertos = aciertos + 1;
                         updateAciertos(aciertos);
                         cambiarPuntuacion();
+                        subirPuntuacion(aciertos, fallos, puntuacion + 5);
                         pregunta.startAnimation(right_to_left_animation);
 
                         right_to_left_animation.setAnimationListener(new Animation.AnimationListener() {
@@ -290,6 +310,7 @@ public class Game extends Activity {
                         fallos = fallos + 1;
                         updateFallos(fallos);
                         cambiarPuntuacion();
+                        subirPuntuacion(aciertos, fallos, puntuacion - 5);
                         pregunta.startAnimation(left_to_right_animation);
 
                         left_to_right_animation.setAnimationListener(new Animation.AnimationListener() {
@@ -468,20 +489,6 @@ public class Game extends Activity {
         protected String doInBackground(Void... args) {
 
             try {
-                ConfigurationBuilder builder = new ConfigurationBuilder();
-                builder.setOAuthConsumerKey(TWITTER_CONSUMER_KEY);
-                builder.setOAuthConsumerSecret(TWITTER_CONSUMER_SECRET);
-
-                String access_token = Preferencias.getOauthToken(getApplicationContext());
-                String access_token_secret = Preferencias.getOauthSecret(getApplicationContext());
-
-                AccessToken accessToken = new AccessToken(access_token,
-                        access_token_secret);
-                twitter = new TwitterFactory(builder.build())
-                        .getInstance(accessToken);
-
-
-                //Twitter twitter = new TwitterFactory().getInstance();
                 User user = twitter.verifyCredentials();
                 Paging paging = new Paging();
                 paging.setCount(100);
@@ -594,6 +601,19 @@ public class Game extends Activity {
         AccessToken accessToken = new AccessToken(Preferencias.getOauthToken(this), Preferencias.getOauthSecret(this));
         twitter.setOAuthAccessToken(accessToken);
         Status status = twitter.destroyStatus(id);
+    }
+
+    private void subirPuntuacion(final int aciertos, final int fallos, final double puntuacion) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    control.updatePuntuacion(twitter.getId(), aciertos, fallos, puntuacion);
+                } catch (TwitterException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
 

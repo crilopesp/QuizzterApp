@@ -34,7 +34,7 @@
                         app:border="true"
                         app:border_color="@color/text"
                         app:border_width="2dp"
-                        android:src="@drawable/photo_no_user"
+                        android:src="@drawable/photo_user_no"
                         android:padding="10dp" />
                 </FrameLayout>
 

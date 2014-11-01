@@ -1,5 +1,7 @@
 package util.servidor;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -53,12 +55,14 @@ public class Controlador {
     }
 
 
-    public String updatePuntuacion(int idUsuario, int aciertos, int fallos, double puntuacion) {
+    public String updatePuntuacion(long idUsuario, int aciertos, int fallos, double puntuacion) {
         final String NAMESPACE = "http://UsersWS/";
         final String URL = "https://quizzter-limeandlemon.rhcloud.com:443/Quizzter/UsersWS?wsdl";
         final String SOAP_ACTION ="http://UsersWS/updatePuntuacion";
         final String METHOD_NAME = "updatePuntuacion";
 
+
+        Log.e("punt", "subiendo, metodo");
         SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
         request.addProperty("idUsuario",idUsuario);
         request.addProperty("aciertos",aciertos);
@@ -74,6 +78,8 @@ public class Controlador {
             androidHttpTransport.call(SOAP_ACTION, envelope);
             SoapPrimitive  resultsRequestSOAP = (SoapPrimitive) envelope.getResponse();
             String res = resultsRequestSOAP.toString();
+
+            Log.e("punt", "subiendo, try");
             //String res2 = resultsRequestSOAP.getValue().toString(); //sirve igual aparentemente
             return res;
         } catch (Exception e) {
@@ -112,6 +118,36 @@ public class Controlador {
 
         return listaUsuarios;
 
+    }
+
+    public Usuario getUsuario(long idUsuario) {
+        final String NAMESPACE = "http://UsersWS/";
+        final String URL = "https://quizzter-limeandlemon.rhcloud.com:443/Quizzter/UsersWS?wsdl";
+        final String SOAP_ACTION = "http://UsersWS/getAmigos";
+        final String METHOD_NAME = "getAmigos";
+
+        ArrayList<Usuario> listaUsuarios = new ArrayList<Usuario>();
+        SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
+        request.addProperty("listaUsuariosString", idUsuario);
+        SoapSerializationEnvelope envelope =
+                new SoapSerializationEnvelope(SoapEnvelope.VER11);
+
+        envelope.setOutputSoapObject(request);
+        HttpTransportSE androidHttpTransport = new HttpTransportSE(URL);
+
+        try {
+            androidHttpTransport.call(SOAP_ACTION, envelope);
+            SoapPrimitive resultsRequestSOAP = (SoapPrimitive) envelope.getResponse();
+            String res = resultsRequestSOAP.toString();
+            //String res2 = resultsRequestSOAP.getValue().toString(); //sirve igual aparentemente
+            Gson gson = new Gson();
+            Type tipoObjeto = new TypeToken<List<Usuario>>() {
+            }.getType();
+            listaUsuarios = gson.fromJson(res, tipoObjeto);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return listaUsuarios.get(0);
     }
 
 }

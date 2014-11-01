@@ -9,7 +9,6 @@ package logica;
 import java.sql.Timestamp;
 
 /**
- *
  * @author marcos
  */
 public class Usuario {
@@ -92,8 +91,17 @@ public class Usuario {
     public void setFecha_insercion(Timestamp fecha_insercion) {
         this.fecha_insercion = fecha_insercion;
     }
-    
-    
-    
-    
+
+    @Override
+    public String toString() {
+        return "Usuario{" +
+                "idusuario=" + idusuario +
+                ", usuario='" + usuario + '\'' +
+                ", nombre='" + nombre + '\'' +
+                ", aciertos=" + aciertos +
+                ", fallos=" + fallos +
+                ", puntuacion=" + puntuacion +
+                ", fecha_insercion=" + fecha_insercion +
+                '}';
+    }
 }

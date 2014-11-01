@@ -5,12 +5,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.ImageView;
 
 import java.io.InputStream;
-import java.util.concurrent.ExecutionException;
 
-import limeandlemon.knowyourtimeline.R;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
@@ -43,6 +40,17 @@ public class TwitterUtil {
             Twitter twitter = getTwitter(_context);
             User user = twitter.showUser(userid);
             String urlfoto = user.getOriginalProfileImageURL();
+            if (urlfoto != "") new DownloadImageTask(iv).execute(urlfoto);
+        } catch (TwitterException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void descargarFotoMenorCalidad(Context _context, long userid, CircularImageView iv) {
+        try {
+            Twitter twitter = getTwitter(_context);
+            User user = twitter.showUser(userid);
+            String urlfoto = user.getMiniProfileImageURL();
             if (urlfoto != "") new DownloadImageTask(iv).execute(urlfoto);
         } catch (TwitterException e) {
             e.printStackTrace();
