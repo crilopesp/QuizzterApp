@@ -61,6 +61,13 @@ public class Profile extends Activity {
             }
         });
         btnclasificacion = (Button) findViewById(R.id.btnClasificacion);
+        btnclasificacion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), Ranking.class);
+                startActivity(intent);
+            }
+        });
         btnopciones = (Button) findViewById(R.id.btnOpciones);
         btnopciones.setOnClickListener(new View.OnClickListener() {
             @Override

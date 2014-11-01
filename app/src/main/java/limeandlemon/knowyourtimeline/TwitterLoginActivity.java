@@ -32,6 +32,7 @@ import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
 import util.Constants;
 import util.Preferencias;
+import util.servidor.Controlador;
 
 public class TwitterLoginActivity extends Activity {
 
@@ -129,6 +130,13 @@ public class TwitterLoginActivity extends Activity {
                     AccessToken accessToken = twitter.getOAuthAccessToken(requestToken, verifier);
                     Preferencias.setOauthToken(getApplicationContext(), accessToken.getToken());
                     Preferencias.setOauthSecret(getApplicationContext(), accessToken.getTokenSecret());
+                    try {
+                        long id = twitter.getId();
+                        User user = twitter.showUser(id);
+                        String respuesta = new Controlador().insertarUusario(id,user.getScreenName(),user.getName());
+                    } catch (TwitterException e) {
+                        e.printStackTrace();
+                    }
                     Log.d(Constants.TAG, "TWITTER LOGIN SUCCESS!!!");
                     descargarFotos(twitter);
                     TwitterLoginActivity.this.setResult(TWITTER_LOGIN_RESULT_CODE_SUCCESS);

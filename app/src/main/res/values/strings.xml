@@ -55,5 +55,6 @@
     <string name="rosa">PinkDream</string>
     <string name="elegance">Elegance</string>
     <string name="aplicar">Apply</string>
+    <string name="title_activity_ranking">Ranking</string>
 
 </resources>
